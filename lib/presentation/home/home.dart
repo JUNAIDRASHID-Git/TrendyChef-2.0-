@@ -46,7 +46,19 @@ class HomeScreen extends StatelessWidget {
                 ],
               );
             } else if (state is HomeError) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Column(
+                  children: [
+                    Text(state.message),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(LoadHomeData());
+                      },
+                      child: Text("Refresh"),
+                    ),
+                  ],
+                ),
+              );
             } else {
               return const SizedBox.shrink();
             }

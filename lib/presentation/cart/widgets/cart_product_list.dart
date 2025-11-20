@@ -25,7 +25,11 @@ class CartProductList extends StatelessWidget {
             final item = cartItems[index];
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: CartProductCard(product: item, lang: lang),
+              child: CartProductCard(
+                product: item,
+                lang: lang,
+                items: cartItems,
+              ),
             );
           },
         ),

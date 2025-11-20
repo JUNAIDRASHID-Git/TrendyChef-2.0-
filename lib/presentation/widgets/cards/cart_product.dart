@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trendychef/core/services/api/cart/delete.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/cart/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/cart/widgets/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/widgets/buttons/cart/bloc/cart_button_bloc.dart';
 import 'package:trendychef/presentation/widgets/buttons/delete/delete.dart';
 import 'package:trendychef/presentation/widgets/cards/image.dart';
+import 'package:trendychef/presentation/widgets/controllers/quantity/quantity_controller.dart';
 import 'package:trendychef/presentation/widgets/text/product_name_text.dart';
 
 class CartProductCard extends StatelessWidget {
   final CartItemModel product;
+  final List<CartItemModel> items;
+
   final AppLocalizations lang;
 
-  const CartProductCard({super.key, required this.product, required this.lang});
+  const CartProductCard({
+    super.key,
+    required this.product,
+    required this.lang,
+    required this.items,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,30 +92,18 @@ class CartProductCard extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.remove, size: 18),
-                      SizedBox(width: 8),
-                      Text("1"),
-                      SizedBox(width: 8),
-                      Icon(Icons.add, size: 18),
-                    ],
-                  ),
+                child: QuantityController(
+                  quantity: product.quantity,
+                  productId: product.productId,
+                  stock: product.productStock,
                 ),
               ),
 
               DeleteButton(
                 onTap: () {
-                  removeFromLocalCart(productId: product.id);
+                  context.read<CartButtonBloc>().add(
+                    CartDeleteEvent(productID: product.productId),
+                  );
                   context.read<CartBloc>().add(CartFetchEvent());
                 },
               ),

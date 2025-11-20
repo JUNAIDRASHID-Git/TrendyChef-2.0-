@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/cart/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/cart/widgets/bloc/cart_bloc.dart';
 import 'package:trendychef/presentation/cart/widgets/cart_product_list.dart';
 
 class CartScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class CartScreen extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
-            if (state is Cartloading) {
+            if (state is CartLoading) {
               return const Center(child: CircularProgressIndicator());
             }
 

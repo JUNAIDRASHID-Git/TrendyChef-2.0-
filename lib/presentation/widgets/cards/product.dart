@@ -30,59 +30,71 @@ class ProductCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 255, 255, 255),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: const Color.fromARGB(80, 238, 238, 238)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ImageCard(imageUrl: product.image, width: 180, height: 170),
-            Column(
-              crossAxisAlignment: .start,
+            // ----------------------------------------
+            // STACK: Image + CartButton positioned
+            // ----------------------------------------
+            Stack(
               children: [
-                ProductNameText(productName: productName),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          '${product.regularPrice.toStringAsFixed(2)} SAR',
-                          style: const TextStyle(
-                            fontFamily: "noto_sans",
-                            fontSize: 14,
-                            color: AppColors.fontColor,
-                          ),
-                        ),
-                        Text(
-                          '${product.salePrice.toStringAsFixed(2)} SAR',
-                          style: const TextStyle(
-                            fontFamily: "noto_sans",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: AppColors.fontColor,
-                          ),
-                        ),
-                      ],
-                    ),
+                ImageCard(imageUrl: product.image, width: 180, height: 170),
 
-                    CartButton(
-                      item: CartItemModel(
-                        id: 0,
-                        cartId: 1,
-                        productId: product.id ?? 0,
-                        productImage: product.image,
-                        productEName: product.eName,
-                        productArName: product.arName,
-                        productStock: product.stock,
-                        productSalePrice: product.salePrice,
-                        productRegularPrice: product.regularPrice,
-                        weight: product.weight,
-                        quantity: 0,
-                        addedAt: DateTime.now(),
+                Positioned(
+                  bottom: 6,
+                  right: 6,
+                  child: CartButton(
+                    item: CartItemModel(
+                      id: product.id!,
+                      cartId: 1,
+                      productId: product.id!,
+                      productImage: product.image,
+                      productEName: product.eName,
+                      productArName: product.arName,
+                      productStock: product.stock,
+                      productSalePrice: product.salePrice,
+                      productRegularPrice: product.regularPrice,
+                      weight: product.weight,
+                      quantity: 1,
+                      addedAt: DateTime.now(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            // Product name
+            ProductNameText(productName: productName),
+
+            const SizedBox(height: 10),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${product.regularPrice.toStringAsFixed(2)} SAR',
+                      style: const TextStyle(
+                        fontFamily: "noto_sans",
+                        fontSize: 14,
+                        color: AppColors.fontColor,
+                      ),
+                    ),
+                    Text(
+                      '${product.salePrice.toStringAsFixed(2)} SAR',
+                      style: const TextStyle(
+                        fontFamily: "noto_sans",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: AppColors.fontColor,
                       ),
                     ),
                   ],

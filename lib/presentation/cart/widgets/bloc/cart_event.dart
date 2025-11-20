@@ -5,4 +5,3 @@ sealed class CartEvent {}
 
 final class CartFetchEvent extends CartEvent {}
 
-final class CartDeleteEvent extends CartEvent {}

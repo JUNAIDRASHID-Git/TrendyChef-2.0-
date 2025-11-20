@@ -9,7 +9,7 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartInitial()) {
     on<CartFetchEvent>((event, emit) {
-      emit(Cartloading());
+      emit(CartLoading());
       try {
         final cartItems = getCartLocal();
         emit(CartLoaded(cartItems: cartItems));

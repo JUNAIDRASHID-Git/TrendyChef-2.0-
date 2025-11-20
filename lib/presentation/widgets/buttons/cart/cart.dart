@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
-import 'package:trendychef/presentation/cart/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/cart/widgets/bloc/cart_bloc.dart';
 import 'package:trendychef/presentation/widgets/buttons/cart/bloc/cart_button_bloc.dart';
+import 'package:trendychef/presentation/widgets/controllers/quantity/quantity_controller.dart';
 
 class CartButton extends StatelessWidget {
   final CartItemModel item;
@@ -12,73 +13,98 @@ class CartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartButtonBloc, CartButtonState>(
-      buildWhen: (prev, curr) => curr is! CartButtonInitial,
       builder: (context, state) {
-        /// ---------- LOADING ----------
+        // Loading state
         if (state is CartButtonLoading) {
-          return Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Center(
-              child: SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-          );
+          return _buildLoading();
         }
 
-        /// ---------- ERROR ----------
+        // Error state
         if (state is CartButtonError) {
-          return Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.error, size: 20, color: Colors.red),
+          return _buildError();
+        }
+
+        // Item exists in cart
+        if (state is CartItemExist && state.productId == item.productId) {
+          return QuantityController(
+            productId: item.productId,
+            quantity: item.quantity,
+            stock: item.productStock,
           );
         }
 
-        /// ---------- DEFAULT BUTTON ----------
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
+        // Item not in cart
+        if (state is CartItemNotExist && state.productId == item.productId) {
+          return _buildAddToCartButton(context);
+        }
+
+        // Default fallback
+        return _buildAddToCartButton(context);
+      },
+    );
+  }
+
+  Widget _buildLoading() {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: const Center(
+        child: SizedBox(
+          width: 18,
+          height: 18,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError() {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.red.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: const Icon(Icons.error, size: 20, color: Colors.red),
+    );
+  }
+
+  Widget _buildAddToCartButton(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        splashColor: AppColors.fontColor.withOpacity(0.2),
+        highlightColor: Colors.transparent,
+        onTap: () {
+          context.read<CartButtonBloc>().add(CartAddEvent(item: item));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Added to cart')));
+          context.read<CartBloc>().add(CartFetchEvent());
+        },
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
-            splashColor: AppColors.fontColor.withOpacity(0.2),
-            highlightColor: Colors.transparent,
-            onTap: () {
-              context.read<CartButtonBloc>().add(CartAddEvent(item: item));
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Added to cart')));
-              context.read<CartBloc>().add(CartFetchEvent());
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Image.asset(
-                  'assets/icons/cart.png',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.primary,
-                ),
-              ),
+          ),
+          child: Center(
+            child: Image.asset(
+              'assets/icons/cart.png',
+              width: 20,
+              height: 20,
+              color: AppColors.primary,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

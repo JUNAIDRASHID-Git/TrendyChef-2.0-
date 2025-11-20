@@ -8,3 +8,26 @@ final class CartAddEvent extends CartButtonEvent {
 
   CartAddEvent({required this.item});
 }
+
+final class CheckProductExisting extends CartButtonEvent {
+  final int productID;
+
+  CheckProductExisting({required this.productID});
+}
+
+final class CartUpdateQuantityEvent extends CartButtonEvent {
+  final int productID;
+  final int quantity;
+
+  CartUpdateQuantityEvent({
+    required this.productID,
+    required this.quantity,
+  });
+}
+
+
+class CartDeleteEvent extends CartButtonEvent {
+  final int productID;
+
+  CartDeleteEvent({required this.productID});
+}

@@ -7,10 +7,31 @@ final class CartButtonInitial extends CartButtonState {}
 
 final class CartButtonLoading extends CartButtonState {}
 
-final class CartButtonLoaded extends CartButtonState {
-  final bool isItemExist;
+class CartItemExist extends CartButtonState {
+  final int productId;
 
-  CartButtonLoaded({required this.isItemExist});
+  CartItemExist({required this.productId});
 }
 
-final class CartButtonError extends CartButtonState {}
+class CartItemNotExist extends CartButtonState {
+  final int productId;
+
+  CartItemNotExist({required this.productId});
+}
+
+class CartItemQuantityUpdated extends CartButtonState {
+  final int productId;
+  final int quantity;
+
+  CartItemQuantityUpdated({
+    required this.productId,
+    required this.quantity,
+  });
+}
+
+
+final class CartButtonError extends CartButtonState {
+  final String message;
+
+  CartButtonError({required this.message});
+}

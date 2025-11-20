@@ -7,7 +7,7 @@ import 'package:trendychef/core/services/models/cart/cart.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/locale_bloc.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/cart/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/cart/widgets/bloc/cart_bloc.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
 import 'package:trendychef/presentation/home/home.dart';
 import 'package:trendychef/presentation/splash/splash.dart';
@@ -25,7 +25,6 @@ void main() async {
   Hive.registerAdapter(CartModelAdapter());
   Hive.registerAdapter(CartItemModelAdapter());
   await Hive.openBox<CartModel>('cartBox');
-  
 
   runApp(BlocProvider(create: (_) => LocaleCubit(), child: const MyApp()));
 }
