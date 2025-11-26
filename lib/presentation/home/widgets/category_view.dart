@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
-import 'package:trendychef/presentation/widgets/cards/product.dart';
+import 'package:trendychef/widgets/cards/product.dart';
 
 class CategoryView extends StatelessWidget {
   final HomeLoaded state;

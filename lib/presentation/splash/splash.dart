@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trendychef/presentation/widgets/nav/bottom_nav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trendychef/core/services/api/user/create_guest.dart';
+import 'package:trendychef/widgets/nav/bottom_nav.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,8 +32,28 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
+    initGuestUserFlow();
+  }
+
+  /// -----------------------------
+  /// GUEST USER FLOW STARTS HERE
+  /// -----------------------------
+  Future<void> initGuestUserFlow() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? guestId = prefs.getString("guest_id");
+
+    if (guestId == null) {
+      // No guest user → create new one
+      guestId = await createGuestUser();
+
+      if (guestId != null) {
+        await prefs.setString("guest_id", guestId);
+      }
+    }
+
+    // After initialization → navigate
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => BottomNav()),
       );

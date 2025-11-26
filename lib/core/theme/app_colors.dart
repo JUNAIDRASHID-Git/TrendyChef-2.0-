@@ -6,4 +6,5 @@ class AppColors {
   static const Color iconColor = Colors.white;
   static const Color backGroundColor = Colors.white;
   static const Color red = Colors.red;
+  static const Color blue = Colors.lightBlue;
 }

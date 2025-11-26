@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/widgets/buttons/language/language_selector.dart';
+import 'package:trendychef/widgets/buttons/language/language_selector.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.lang});

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:trendychef/core/const/api_endpoints.dart';
 import 'dart:developer';
 
-import 'package:trendychef/core/services/models/category.dart';
+import 'package:trendychef/core/services/models/category/category.dart';
 
 final Dio _dio = Dio(
   BaseOptions(

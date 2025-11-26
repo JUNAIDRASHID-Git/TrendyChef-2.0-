@@ -1,51 +1,42 @@
-import 'dart:developer';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
-import 'package:trendychef/core/services/models/cart/cart.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trendychef/core/const/api_endpoints.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 
-List<CartItemModel> getCartLocal() {
-  final cartBox = Hive.box<CartModel>('cartBox');
-
-  // Assuming there is only ONE cart stored
-  if (cartBox.isEmpty) {
-    log("Cart is empty");
-    return [];
-  }
-
-  final CartModel cart = cartBox.getAt(0)!;
-
-  log("Local cart items: ${cart.items.length}");
-
-  return cart.items;
-}
-
-Future<int> getItemQuantityFromLocalCart(int productId) async {
+/// Fetch guest cart items using guest ID stored in SharedPreferences
+Future<List<CartItemModel>> getGuestCart() async {
   try {
-    if (!Hive.isBoxOpen('cartBox')) {
-      await Hive.openBox<CartModel>('cartBox');
+    final prefs = await SharedPreferences.getInstance();
+    final guestId = prefs.getString('guest_id');
+
+    if (guestId == null || guestId.isEmpty) {
+      debugPrint("No guest ID found in SharedPreferences");
+      return [];
     }
 
-    final cartBox = Hive.box<CartModel>('cartBox');
-    final cart = cartBox.get('userCart');
+    final response = await http.get(
+      Uri.parse("$baseHost/guest/cart?guest_id=$guestId"),
+      headers: {"Content-Type": "application/json"},
+    );
 
-    if (cart == null) {
-      if (kDebugMode) print("No local cart found.");
-      return 1; // default safe value
-    }
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
 
-    try {
-      final item = cart.items.firstWhere((e) => e.productId == productId);
-      return item.quantity;
-    } on StateError {
-      if (kDebugMode) print("Item not found for productId: $productId");
-      return 1; // default safe value
+      final jsonResponce = jsonData
+          .map((item) => CartItemModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      return jsonResponce;
+    } else {
+      debugPrint(
+        "Failed to fetch guest cart. Status code: ${response.statusCode}, Body: ${response.body}",
+      );
+      return [];
     }
-  } catch (e, st) {
-    if (kDebugMode) {
-      print("Error fetching quantity: $e");
-      print(st);
-    }
-    return 1; // fallback safe value
+  } catch (e, stackTrace) {
+    debugPrint("Error fetching guest cart: $e\n$stackTrace");
+    return [];
   }
 }

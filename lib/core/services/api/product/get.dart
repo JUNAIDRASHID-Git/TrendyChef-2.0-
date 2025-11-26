@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:trendychef/core/const/api_endpoints.dart';
-import 'package:trendychef/core/services/models/product_model.dart';
+import 'package:trendychef/core/services/models/product/product_model.dart';
 
 final Dio _dio = Dio(
   BaseOptions(

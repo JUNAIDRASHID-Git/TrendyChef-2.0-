@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/cart/widgets/bloc/cart_bloc.dart';
+import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/cart/widgets/cart_product_list.dart';
 
 class CartScreen extends StatelessWidget {
@@ -11,72 +11,71 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
-      body: SafeArea(
-        child: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            if (state is CartLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      body: BlocBuilder<CartCubit, CartState>(
+        builder: (context, state) {
+          final cartItems = state.items;
+          final itemCount = cartItems.length;
 
-            if (state is CartError) {
-              return Center(child: Text('Error: ${state.message}'));
-            }
-
-            if (state is CartLoaded) {
-              final cartItems = state.cartItems;
-
-              return Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    // Header
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text(
-                            'Cart ',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '(${cartItems.length} items)',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.fontColor.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Empty Cart
-                    if (cartItems.isEmpty)
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Your cart is empty',
-                            style: TextStyle(fontSize: 18),
-                          ),
+          return SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        lang.cart,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-
-                    // Cart Items List
-                    if (cartItems.isNotEmpty)
-                      CartProductList(cartItems: cartItems, lang: lang),
-                  ],
+                      const SizedBox(width: 8),
+                      Text(
+                        "($itemCount)",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.fontColor.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+
+                // If empty cart
+                if (itemCount == 0)
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "Cart Is Empty",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // Cart List + Checkout
+                if (itemCount > 0)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: CartProductList(cartItems: cartItems, lang: lang),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

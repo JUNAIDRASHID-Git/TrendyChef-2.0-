@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:trendychef/core/const/api_endpoints.dart';
-import 'package:trendychef/core/services/models/banner.dart';
+import 'package:trendychef/core/services/models/banner/banner.dart';
 
 final Dio dio = Dio(
   BaseOptions(
-    baseUrl: baseHostbanner,
+    baseUrl: baseHost,
     headers: {'Content-Type': 'application/json', 'X-API-KEY': apiKey},
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
