@@ -1,34 +1,75 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:trendychef/core/const/api_endpoints.dart';
+import 'package:trendychef/core/const/api_endpoints.dart'; // baseHost
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 
-Future<CartItemModel> addItemToGuestCart({
-  required String guestId,
+/// Add or Update Cart Item (Works for User & Guest)
+Future<CartItemModel?> addOrUpdateCartItem({
   required int productId,
   required int quantity,
 }) async {
-  final url = Uri.parse('$baseHost/guest/cart?guest_id=$guestId');
+  final prefs = await SharedPreferences.getInstance();
 
-  final Map<String, dynamic> bodyMap = {
-    'product_id': productId.toString(),
-    'quantity': quantity,
-  };
+  final userToken = prefs.getString('idtoken'); // logged-in user token
+  final guestId = prefs.getString('guest_id');  // guest user id
 
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(bodyMap),
-  );
+  try {
+    // -----------------------------------------------------------------
+    // 🔥 1. USER LOGGED IN → Hit user cart API
+    // -----------------------------------------------------------------
+    if (userToken != null && userToken.isNotEmpty) {
+      final uri = Uri.parse(userCartEndpoint);
 
-  if (response.statusCode == 201 || response.statusCode == 200) {
-    final decoded = jsonDecode(response.body);
-    return CartItemModel.fromJson(decoded);
-  } else if (response.statusCode == 400) {
-    throw Exception('Bad request: ${response.body}');
-  } else {
-    throw Exception(
-      'Failed to add item: ${response.statusCode} ${response.body}',
+      final response = await http.post(
+        uri,
+        headers: {
+          "Authorization": userToken,
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "product_id": productId.toString(),
+          "quantity": quantity,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        return CartItemModel.fromJson(data);
+      } else {
+        debugPrint("❌ Failed to add user cart: ${response.body}");
+        return null;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // 🔥 2. GUEST USER → Hit guest cart API
+    // -----------------------------------------------------------------
+    if (guestId == null || guestId.isEmpty) {
+      debugPrint("⚠️ No guest_id found");
+      return null;
+    }
+
+    final guestUri = Uri.parse("$baseHost/guest/cart?guest_id=$guestId");
+
+    final response = await http.post(
+      guestUri,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "product_id": productId.toString(),
+        "quantity": quantity,
+      }),
     );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return CartItemModel.fromJson(jsonDecode(response.body));
+    } else {
+      debugPrint("❌ Failed to add guest cart: ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    debugPrint("❌ Error adding/updating cart: $e");
+    return null;
   }
 }

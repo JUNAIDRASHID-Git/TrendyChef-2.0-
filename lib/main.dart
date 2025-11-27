@@ -1,17 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trendychef/firebase_options.dart';
 import 'package:trendychef/locale_bloc.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
 import 'package:trendychef/presentation/home/home.dart';
 import 'package:trendychef/presentation/splash/splash.dart';
+import 'package:trendychef/widgets/buttons/google/bloc/google_bloc.dart';
 import 'presentation/home/widgets/carousel/cubit/carousel_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -31,6 +36,7 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => HomeBloc()),
+            BlocProvider(create: (_) => GoogleBloc()),
             BlocProvider<BannerSliderCubit>(
               create: (_) => BannerSliderCubit()..loadBanners(),
             ),

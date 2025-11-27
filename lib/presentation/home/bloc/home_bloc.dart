@@ -17,7 +17,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoading());
       try {
         final banners = await fetchBanner();
-        final cartItems = await getGuestCart();
+        final cartItems = await getCartItems();
         final categories = await getAllCategoryWithProducts();
 
         emit(

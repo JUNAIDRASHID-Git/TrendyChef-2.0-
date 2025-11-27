@@ -2,9 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/api/cart/get.dart';
 import 'package:trendychef/core/services/api/cart/post.dart';
 import 'package:trendychef/core/services/api/cart/delete.dart';
-import 'package:trendychef/core/services/api/cart/put.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CartState {
   final List<CartItemModel> items;
@@ -35,7 +33,7 @@ class CartCubit extends Cubit<CartState> {
   /// Load cart from backend
   Future<void> loadCart() async {
     try {
-      final items = await getGuestCart();
+      final items = await getCartItems();
       emit(CartState(items: items));
     } catch (e) {
       // Failure handling: keep previous state or emit empty list
@@ -54,13 +52,7 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> addToCart(int productId, {int quantity = 1}) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final guestId = prefs.getString('guest_id');
-      await addItemToGuestCart(
-        productId: productId,
-        guestId: guestId ?? '',
-        quantity: quantity,
-      );
+      await addOrUpdateCartItem(productId: productId, quantity: quantity);
       await loadCart(); // refresh local state from server
     } catch (e) {
       // handle error (e.g. show snackbar via BlocListener)
@@ -69,7 +61,7 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> removeFromCart(int productId) async {
     try {
-      await deleteGuestCartItem(productId);
+      await deleteCartItemUniversal(productId);
       await loadCart();
     } catch (e) {
       print("Remove from cart failed: $e");
@@ -78,7 +70,7 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> updateQuantity(int productId, int qty) async {
     try {
-      await updateGuestCartItem(productId: productId, quantity: qty);
+      await addOrUpdateCartItem(productId: productId, quantity: qty);
       // Option A (safe): reload from server to get latest item representation
       await loadCart();
     } catch (e) {}

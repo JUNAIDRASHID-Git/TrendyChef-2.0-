@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "156938940217",
+    "project_id": "trendy-c-57ade",
+    "storage_bucket": "trendy-c-57ade.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156938940217:android:9f170f70ffbe3eb4c082e8",
+        "android_client_info": {
+          "package_name": "com.example.trendychef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156938940217-qnm14l46pfp3h0qo87kdfq9j8m2k0iof.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trendychef",
+            "certificate_hash": "3c4549c7580b6e4ad1e6376b5f03c7bf50b55bf6"
+          }
+        },
+        {
+          "client_id": "156938940217-3id5a4qvchsmn6pfpj0bkiuhn6idf0cp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx2DM2h3sFpd9VF8OcchIwG_eI12z9np4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156938940217-3id5a4qvchsmn6pfpj0bkiuhn6idf0cp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "156938940217-2op9d290letj42hcu203rlhrdsf6slkq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trendychef"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

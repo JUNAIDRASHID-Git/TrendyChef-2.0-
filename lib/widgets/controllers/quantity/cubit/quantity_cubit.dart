@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/api/cart/get.dart';
-import 'package:trendychef/core/services/api/cart/put.dart';
+import 'package:trendychef/core/services/api/cart/post.dart';
 
 class QuantityState {
   final Map<int, int> quantities;
@@ -27,7 +27,7 @@ class QuantityCubit extends Cubit<QuantityState> {
 
   /// load cart items initially
   Future<void> loadCart() async {
-    final items = await getGuestCart();
+    final items = await getCartItems();
 
     final q = <int, int>{};
     final s = <int, int>{};
@@ -49,7 +49,7 @@ class QuantityCubit extends Cubit<QuantityState> {
 
     emit(state.copyWith(quantities: updatedQuantities));
 
-    await updateGuestCartItem(productId: id, quantity: qty);
+    await addOrUpdateCartItem(productId: id, quantity: qty);
   }
 
   void increase(int id) {
