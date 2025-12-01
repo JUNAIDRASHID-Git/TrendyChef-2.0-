@@ -15,18 +15,15 @@ class CartProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-      child: ListView.builder(
-        itemCount: cartItems.length,
-        itemBuilder: (context, index) {
-          final item = cartItems[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: CartProductCard(product: item, lang: lang),
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: cartItems.length,
+      itemBuilder: (context, index) {
+        final item = cartItems[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: CartProductCard(product: item, lang: lang),
+        );
+      },
     );
   }
 }

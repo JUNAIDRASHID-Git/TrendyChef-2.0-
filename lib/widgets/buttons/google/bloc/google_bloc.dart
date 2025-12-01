@@ -1,9 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:trendychef/core/services/api/auth/google.dart';
+import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
+import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 
 part 'google_event.dart';
 part 'google_state.dart';
@@ -46,7 +48,10 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
         final idToken = await userCredential.user?.getIdToken();
         if (idToken == null) throw Exception("Failed to retrieve token");
 
-        await userGoogleAuthHandler(idToken, event.context);
+        await userGoogleAuthHandler(idToken);
+        Navigator.pop(event.context);
+        event.context.read<AccountBloc>().add(GetUserDetailEvent());
+        event.context.read<CartCubit>().loadCart();
         emit(GoogleLoaded(provider: "Google"));
       } else {
         // Mobile sign-in
@@ -69,7 +74,10 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
         final idToken = await userCredential.user?.getIdToken();
         if (idToken == null) throw Exception("Failed to retrieve token");
 
-        await userGoogleAuthHandler(idToken, event.context,);
+        await userGoogleAuthHandler(idToken);
+        Navigator.pop(event.context);
+        event.context.read<AccountBloc>().add(GetUserDetailEvent());
+        event.context.read<CartCubit>().loadCart();
         emit(GoogleLoaded(provider: "Google"));
       }
     } on GoogleSignInException catch (e) {

@@ -35,11 +35,7 @@ class CategoryView extends StatelessWidget {
                     final product = category.products![index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 12),
-                      child: ProductCard(
-                        product: product,
-                        lang: lang,
-                        items: state.cartItems,
-                      ),
+                      child: ProductCard(product: product),
                     );
                   },
                 ),

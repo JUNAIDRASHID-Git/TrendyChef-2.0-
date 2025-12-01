@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
-import 'package:trendychef/presentation/home/widgets/carousel/auto_crousel_slider.dart';
+import 'package:trendychef/widgets/container/carousel/auto_crousel_slider.dart';
 import 'package:trendychef/presentation/home/widgets/category_view.dart';
 import 'package:trendychef/presentation/home/widgets/home_header.dart';
 import 'package:trendychef/presentation/home/widgets/shimmer.dart';
-
 import 'dart:ui';
+import 'package:trendychef/widgets/buttons/search/fake_search.dart';
 
 class WebScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.touch,
-        PointerDeviceKind.trackpad,
-        PointerDeviceKind.stylus,
-      };
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.touch,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.stylus,
+  };
 }
 
 class HomeScreen extends StatelessWidget {
@@ -41,7 +42,38 @@ class HomeScreen extends StatelessWidget {
               } else if (state is HomeLoaded) {
                 return Column(
                   children: [
-                    HomeHeader(lang: lang),
+                    SizedBox(height: 5),
+                    HomeHeader(lang: lang, user: state.user),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: FakeSearchButton(),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.backGroundColor,
+                              border: Border.all(
+                                color: AppColors.fontColor.withOpacity(0.1),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.camera_alt_outlined,
+                              color: AppColors.fontColor.withOpacity(0.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
@@ -51,8 +83,10 @@ class HomeScreen extends StatelessWidget {
                           physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             SliverToBoxAdapter(child: AutoSlidingBanner()),
+                            SliverToBoxAdapter(child: SizedBox(height: 10)),
                             SliverToBoxAdapter(
-                                child: CategoryView(state: state, lang: lang)),
+                              child: CategoryView(state: state, lang: lang),
+                            ),
                           ],
                         ),
                       ),
@@ -74,7 +108,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               }
-
               return const SizedBox.shrink();
             },
           ),

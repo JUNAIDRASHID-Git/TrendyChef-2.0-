@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/api/cart/get.dart';
 import 'package:trendychef/core/services/api/cart/post.dart';
@@ -12,6 +13,10 @@ class CartState {
   double get totalAmount => items.fold(
     0.0,
     (sum, item) => sum + (item.productSalePrice * item.quantity),
+  );
+  double get totalRegularAmount => items.fold(
+    0.0,
+    (sum, item) => sum + (item.productRegularPrice * item.quantity),
   );
 
   double get totalKg =>
@@ -64,7 +69,9 @@ class CartCubit extends Cubit<CartState> {
       await deleteCartItemUniversal(productId);
       await loadCart();
     } catch (e) {
-      print("Remove from cart failed: $e");
+      if (kDebugMode) {
+        print("Remove from cart failed: $e");
+      }
     }
   }
 
@@ -73,7 +80,11 @@ class CartCubit extends Cubit<CartState> {
       await addOrUpdateCartItem(productId: productId, quantity: qty);
       // Option A (safe): reload from server to get latest item representation
       await loadCart();
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print("update cart failed: $e");
+      }
+    }
   }
 
   void increase(int productId) {

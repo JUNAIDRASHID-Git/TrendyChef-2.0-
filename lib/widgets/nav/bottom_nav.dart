@@ -4,7 +4,7 @@ import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/cart/cart.dart';
 import 'package:trendychef/presentation/category/category.dart';
 import 'package:trendychef/presentation/home/home.dart';
-import 'package:trendychef/presentation/profile/profile.dart';
+import 'package:trendychef/presentation/account/account.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -18,8 +18,8 @@ class _BottomNavState extends State<BottomNav> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    CategoryPage(),
-    ProfilePage(),
+    CategoryScreen(),
+    AccountScreen(),
     CartScreen(),
   ];
 
@@ -41,42 +41,51 @@ class _BottomNavState extends State<BottomNav> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 10),
         height: 90,
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.fontColor.withOpacity(0.15),
-              spreadRadius: 2,
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          color: AppColors.backGroundColor,
+          border: const Border(top: BorderSide(color: Colors.grey, width: 0.5)),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: _buildNavItem(label: "home", title: lang.home, index: 0),
-            ),
-            Expanded(
-              child: _buildNavItem(
-                label: "categories",
-                title: lang.categories,
-                index: 1,
+        child: Center(
+          // centers content on large screens
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _buildNavItem(
+                      label: "home",
+                      title: lang.home,
+                      index: 0,
+                    ),
+                  ),
+                  Expanded(
+                    child: _buildNavItem(
+                      label: "categories",
+                      title: lang.categories,
+                      index: 1,
+                    ),
+                  ),
+                  Expanded(
+                    child: _buildNavItem(
+                      label: "account",
+                      title: lang.account,
+                      index: 2,
+                    ),
+                  ),
+                  Expanded(
+                    child: _buildNavItem(
+                      label: "cart",
+                      title: lang.cart,
+                      index: 3,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: _buildNavItem(
-                label: "account",
-                title: lang.account,
-                index: 2,
-              ),
-            ),
-            Expanded(
-              child: _buildNavItem(label: "cart", title: lang.cart, index: 3),
-            ),
-          ],
+          ),
         ),
       ),
     );

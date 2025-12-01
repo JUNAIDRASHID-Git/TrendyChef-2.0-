@@ -8,7 +8,6 @@ import 'package:trendychef/core/const/api_endpoints.dart';
 /// Returns a Map with response data on success, throws Exception on failure.
 Future<Map<String, dynamic>> userGoogleAuthHandler(
   String idToken,
-  BuildContext context,
 ) async {
   final uri = Uri.parse(googleAuthEndpoind);
   final prefs = await SharedPreferences.getInstance();
@@ -51,13 +50,6 @@ Future<Map<String, dynamic>> userGoogleAuthHandler(
     }
     if (data['picture'] != null) {
       await prefs.setString('picture', data['picture'] as String);
-    }
-
-    // Navigate to home/shop
-    try {
-      Navigator.pop(context);
-    } catch (e) {
-      debugPrint('Navigation error (ignored): $e');
     }
 
     debugPrint('✅ Authentication successful: $data');

@@ -9,18 +9,12 @@ import 'package:trendychef/widgets/text/product_name_text.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
-  final List<CartItemModel> items;
-  final AppLocalizations lang;
 
-  const ProductCard({
-    super.key,
-    required this.product,
-    required this.lang,
-    required this.items,
-  });
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     final productName = lang.localeName == "en"
         ? product.eName
         : product.arName ?? "";

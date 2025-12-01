@@ -25,22 +25,28 @@ class QuantityControllerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               InkWell(
-                onTap: qty > 1 ? () => cubit.decrease(productId) : null,
-                child: Icon(
-                  Icons.remove,
-                  size: 14,
-                  color: qty > 1 ? AppColors.fontColor : Colors.grey.shade400,
-                ),
+                onTap: qty > 1
+                    ? () => cubit.decrease(productId)
+                    : () => cubit.removeFromCart(productId),
+                child: Icon(Icons.remove, size: 14, color: AppColors.fontColor),
               ),
               const SizedBox(width: 8),
-              Text(qty.toString(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              Text(
+                qty.toString(),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(width: 8),
               InkWell(
                 onTap: qty < stock ? () => cubit.increase(productId) : null,
                 child: Icon(
                   Icons.add,
                   size: 14,
-                  color: qty < stock ? AppColors.fontColor : Colors.grey.shade400,
+                  color: qty < stock
+                      ? AppColors.fontColor
+                      : Colors.grey.shade400,
                 ),
               ),
             ],

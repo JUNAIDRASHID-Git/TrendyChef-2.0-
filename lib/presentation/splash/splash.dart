@@ -38,27 +38,39 @@ class _SplashScreenState extends State<SplashScreen>
   /// -----------------------------
   /// GUEST USER FLOW STARTS HERE
   /// -----------------------------
-  Future<void> initGuestUserFlow() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? guestId = prefs.getString("guest_id");
+ Future<void> initGuestUserFlow() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? guestId = prefs.getString("guest_id");
+  String? userToken = prefs.getString("idtoken");
 
-    if (guestId == null) {
-      // No guest user → create new one
-      guestId = await createGuestUser();
-
-      if (guestId != null) {
-        await prefs.setString("guest_id", guestId);
-      }
-    }
-
-    // After initialization → navigate
+  // If guest already exists OR user is logged in → go to BottomNav
+  if (guestId != null || userToken != null) {
     Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => BottomNav()),
+        MaterialPageRoute(builder: (context) => const BottomNav()),
       );
     });
+    return;
   }
+
+  // No guest + no user → create guest
+  guestId = await createGuestUser();
+
+  if (guestId != null) {
+    await prefs.setString("guest_id", guestId);
+  }
+
+  Future.delayed(const Duration(seconds: 2), () {
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const BottomNav()),
+    );
+  });
+}
+
 
   @override
   void dispose() {

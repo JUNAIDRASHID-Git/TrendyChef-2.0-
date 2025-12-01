@@ -33,8 +33,6 @@ class CartButton extends StatelessWidget {
         splashColor: AppColors.fontColor.withOpacity(0.2),
         onTap: () async {
           await context.read<CartCubit>().addToCart(productId);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Added to cart')));
         },
         child: Container(
           width: 40,

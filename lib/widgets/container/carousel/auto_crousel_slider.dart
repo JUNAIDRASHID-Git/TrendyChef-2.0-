@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:trendychef/presentation/home/widgets/carousel/cubit/carousel_cubit.dart';
+import 'package:trendychef/widgets/container/carousel/cubit/carousel_cubit.dart';
 
 class AutoSlidingBanner extends StatelessWidget {
   const AutoSlidingBanner({super.key});
