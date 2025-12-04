@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
+import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
+import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
 import 'package:trendychef/widgets/container/carousel/auto_crousel_slider.dart';
 import 'package:trendychef/presentation/home/widgets/category_view.dart';
@@ -34,10 +37,7 @@ class HomeScreen extends StatelessWidget {
         body: SafeArea(
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
-              if (state is HomeInitial) {
-                context.read<HomeBloc>().add(LoadHomeData());
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is HomeLoading) {
+              if (state is HomeLoading) {
                 return const HomeShimmer();
               } else if (state is HomeLoaded) {
                 return Column(
@@ -99,7 +99,11 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(state.message),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.clear();
+                          context.read<AccountBloc>().add(GetUserDetailEvent());
+                          context.read<CartCubit>().loadCart();
                           context.read<HomeBloc>().add(LoadHomeData());
                         },
                         child: Text("Refresh"),

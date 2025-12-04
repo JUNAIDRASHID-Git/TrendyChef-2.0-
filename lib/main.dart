@@ -18,6 +18,7 @@ import 'package:trendychef/presentation/account/account.dart';
 import 'package:trendychef/presentation/search/search.dart';
 import 'package:trendychef/presentation/splash/splash.dart';
 import 'package:trendychef/widgets/buttons/google/bloc/google_bloc.dart';
+import 'package:trendychef/widgets/buttons/payment/bloc/payment_bloc.dart';
 import 'package:trendychef/widgets/policy/privacy_policy.dart';
 import 'package:trendychef/widgets/policy/return_policy.dart';
 import 'package:trendychef/widgets/policy/terms_and_conditions.dart';
@@ -45,13 +46,14 @@ class MyApp extends StatelessWidget {
       builder: (context, state) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => HomeBloc()),
+            BlocProvider(create: (_) => HomeBloc()..add(LoadHomeData())),
             BlocProvider(create: (_) => GoogleBloc()),
             BlocProvider(create: (_) => BannerSliderCubit()..loadBanners()),
             BlocProvider(create: (_) => CartCubit()..loadCart()),
             BlocProvider(
               create: (_) => AccountBloc()..add(GetUserDetailEvent()),
             ),
+            BlocProvider(create: (_) => PaymentBloc()),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -69,6 +71,7 @@ class MyApp extends StatelessWidget {
 
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              fontFamily: "inter",
             ),
 
             home: const SplashScreen(),

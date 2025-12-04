@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:trendychef/core/services/api/auth/google.dart';
 import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
+import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
 
 part 'google_event.dart';
 part 'google_state.dart';
@@ -52,6 +53,7 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
         Navigator.pop(event.context);
         event.context.read<AccountBloc>().add(GetUserDetailEvent());
         event.context.read<CartCubit>().loadCart();
+        event.context.read<HomeBloc>().add(LoadHomeData());
         emit(GoogleLoaded(provider: "Google"));
       } else {
         // Mobile sign-in
@@ -78,6 +80,7 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
         Navigator.pop(event.context);
         event.context.read<AccountBloc>().add(GetUserDetailEvent());
         event.context.read<CartCubit>().loadCart();
+        event.context.read<HomeBloc>().add(LoadHomeData());
         emit(GoogleLoaded(provider: "Google"));
       }
     } on GoogleSignInException catch (e) {

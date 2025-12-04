@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
+import 'package:trendychef/presentation/checkout/check_out.dart';
 import 'package:trendychef/widgets/text/price.dart';
 
 class CheckOutExpandingWidget extends StatefulWidget {
@@ -233,6 +234,13 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
 
                       if (userToken == null) {
                         Navigator.pushNamed(context, "/auth");
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CheckOutScreen(),
+                          ),
+                        );
                       }
                     },
                     child: Ink(

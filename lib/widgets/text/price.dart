@@ -48,7 +48,7 @@ class PriceTextWidget extends StatelessWidget {
             Image.asset(
               "assets/images/riyal_logo.png",
               color: AppColors.fontColor,
-              height: fontSize-1,
+              height: fontSize - 1,
             ),
             const SizedBox(width: 5),
             Text(
