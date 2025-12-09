@@ -1,23 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trendychef/Presentation/search/bloc/search_bloc.dart';
+import 'package:trendychef/presentation/search/bloc/search_bloc.dart';
 import 'package:trendychef/core/services/models/product/product_model.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
-import 'package:trendychef/widgets/buttons/search/search.dart';
 import 'package:trendychef/widgets/cards/product.dart';
+import 'package:trendychef/widgets/buttons/search/search.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final searchController = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (searchController.text.isEmpty) {
-        context.read<SearchBloc>().add(Searching(""));
-      }
-    });
+  State<SearchScreen> createState() => _SearchScreenState();
+}
 
+class _SearchScreenState extends State<SearchScreen> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+
+    // Trigger initial empty search
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SearchBloc>().add(Searching(""));
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -32,45 +49,22 @@ class SearchScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // 🟩 Search bar + language selector
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        children: [
-                          // 🔍 Responsive Search Field
-                          Expanded(
-                            flex: 8,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                double searchWidth = constraints.maxWidth;
-                                if (searchWidth > 900) {
-                                  searchWidth =
-                                      600; // cap width on large screens
-                                }
-                                return Center(
-                                  child: SizedBox(
-                                    width: searchWidth,
-                                    height: 50,
-                                    child: searchField(
-                                      context: context,
-                                      controller: searchController,
-                                      onChanged: (query) {
-                                        context.read<SearchBloc>().add(
-                                          Searching(query),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
+                      child: SizedBox(
+                        height: 50,
+                        child: searchField(
+                          context: context,
+                          controller: _searchController,
+                          onChanged: (query) {
+                            context.read<SearchBloc>().add(Searching(query));
+                          },
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
@@ -83,17 +77,17 @@ class SearchScreen extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1200),
           child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
-              return switch (state) {
-                SearchInitial() || SearchLoading() => const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-                SearchLoaded() =>
-                  state.products.isEmpty
-                      ? _buildEmptyState()
-                      : _buildGrid(state.products, context),
-                SearchError() => _buildErrorState(),
-                _ => const SizedBox.shrink(),
-              };
+              if (state is SearchLoading || state is SearchInitial) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is SearchLoaded) {
+                if (state.products.isEmpty) {
+                  return _buildEmptyState();
+                }
+                return _buildGrid(state.products);
+              } else if (state is SearchError) {
+                return _buildErrorState();
+              }
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -137,7 +131,7 @@ class SearchScreen extends StatelessWidget {
     ),
   );
 
-  Widget _buildGrid(List<ProductModel> products, BuildContext context) {
+  Widget _buildGrid(List<ProductModel> products) {
     final screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth > 1000
         ? 5
@@ -148,11 +142,13 @@ class SearchScreen extends StatelessWidget {
         : 2;
 
     return GridView.builder(
-      padding: const EdgeInsets.all(1),
+      padding: const EdgeInsets.all(8),
       itemCount: products.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         mainAxisExtent: 320,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) => ProductCard(product: products[index]),
     );

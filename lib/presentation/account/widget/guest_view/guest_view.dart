@@ -13,7 +13,7 @@ class GuestAccountScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.89,
+        height: MediaQuery.of(context).size.height * 0.95,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

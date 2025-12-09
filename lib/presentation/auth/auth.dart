@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/google/googlebtn.dart';
 import 'package:trendychef/widgets/buttons/text/text.dart';
 
@@ -9,6 +11,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: Center(
@@ -26,7 +29,7 @@ class AuthScreen extends StatelessWidget {
                     color: Colors.transparent, // keeps your design clean
                     borderRadius: BorderRadius.circular(30),
                     child: InkWell(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                       borderRadius: BorderRadius.circular(30),
                       child: Container(
                         padding: const EdgeInsets.all(10),
@@ -52,7 +55,7 @@ class AuthScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        "Sign in to continue\nshopping your favorites!",
+                        lang.signintocontinue,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color.fromARGB(255, 1, 95, 86),
@@ -76,7 +79,7 @@ class AuthScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text("By continuing, you agree to our"),
+                        Text(lang.bycontinuingyouagreetoour),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -84,7 +87,7 @@ class AuthScreen extends StatelessWidget {
                               route: "/terms-and-conditions",
                               title: "Terms & Conditions",
                             ),
-                            const Text("and"),
+                            Text(lang.and),
                             TextButtonWidget(
                               route: "/privacy-policy",
                               title: "Privacy Policy",

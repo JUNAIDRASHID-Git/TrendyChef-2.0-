@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/google/bloc/google_bloc.dart';
 
 class GoogleSignInButton extends StatefulWidget {
@@ -31,6 +32,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton>
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     return BlocBuilder<GoogleBloc, GoogleState>(
       builder: (context, state) {
         final bool isLoading = state is GoogleLoading;
@@ -124,8 +126,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton>
                                   ),
                                 ),
                                 const SizedBox(width: 14),
-                                const Text(
-                                  "Continue with Google",
+                                Text(
+                                  lang.continuewithgoogle,
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,

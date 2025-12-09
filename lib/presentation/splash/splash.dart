@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/services/api/user/create_guest.dart';
-import 'package:trendychef/widgets/nav/bottom_nav.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,39 +38,32 @@ class _SplashScreenState extends State<SplashScreen>
   /// -----------------------------
   /// GUEST USER FLOW STARTS HERE
   /// -----------------------------
- Future<void> initGuestUserFlow() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? guestId = prefs.getString("guest_id");
-  String? userToken = prefs.getString("idtoken");
+  Future<void> initGuestUserFlow() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? guestId = prefs.getString("guest_id");
+    String? userToken = prefs.getString("idtoken");
 
-  // If guest already exists OR user is logged in → go to BottomNav
-  if (guestId != null || userToken != null) {
+    // If guest already exists OR user is logged in → go to BottomNav
+    if (guestId != null || userToken != null) {
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        context.go("/home");
+      });
+      return;
+    }
+
+    // No guest + no user → create guest
+    guestId = await createGuestUser();
+
+    if (guestId != null) {
+      await prefs.setString("guest_id", guestId);
+    }
+
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const BottomNav()),
-      );
+      context.go("/home");
     });
-    return;
   }
-
-  // No guest + no user → create guest
-  guestId = await createGuestUser();
-
-  if (guestId != null) {
-    await prefs.setString("guest_id", guestId);
-  }
-
-  Future.delayed(const Duration(seconds: 2), () {
-    if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNav()),
-    );
-  });
-}
-
 
   @override
   void dispose() {

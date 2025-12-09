@@ -1,10 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/services/models/payment/payment.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/checkout/bloc/checkout_bloc.dart';
 import 'package:trendychef/widgets/buttons/payment/bloc/payment_bloc.dart';
 import 'package:trendychef/widgets/container/payment_web_view/payment_web_view.dart';
@@ -20,8 +20,36 @@ class PaymentButton extends StatelessWidget {
   final List<CartItemModel> cartItems;
   final CheckoutLoaded state;
 
+  bool _isAddressValid() {
+    final address = state.user.address;
+
+    return address.street.isNotEmpty &&
+        address.city.isNotEmpty &&
+        address.state.isNotEmpty &&
+        address.postalCode.isNotEmpty;
+  }
+
+  void _showSnack(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          msg,
+          style: TextStyle(
+            color: AppColors.backGroundColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.red,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     final totalAmount = state.totalAmount + state.shippingCost;
 
     return Container(
@@ -38,12 +66,12 @@ class PaymentButton extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Expanded Pay Now button
           Expanded(
             child: BlocConsumer<PaymentBloc, PaymentState>(
               listener: (context, paymentstate) {
                 if (paymentstate is PaymentLoaded) {
                   log(paymentstate.paymentUrl);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -56,6 +84,7 @@ class PaymentButton extends StatelessWidget {
               },
               builder: (context, paymentstate) {
                 final isLoading = paymentstate is PaymentLoading;
+
                 return Material(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(19),
@@ -64,6 +93,24 @@ class PaymentButton extends StatelessWidget {
                     onTap: isLoading
                         ? null
                         : () {
+                            // VALIDATION CHECKS
+
+                            // 1️⃣ Check cart has items
+                            if (cartItems.isEmpty) {
+                              _showSnack(context, lang.cartisempty);
+                              return;
+                            }
+
+                            // 2️⃣ Check user address
+                            if (!_isAddressValid()) {
+                              _showSnack(
+                                context,
+                                "Please add a delivery address before payment.",
+                              );
+                              return;
+                            }
+
+                            // 3️⃣ Start Payment
                             final payment = PaymentModel(
                               cartid: "123",
                               amount: totalAmount,
@@ -95,7 +142,7 @@ class PaymentButton extends StatelessWidget {
                               ),
                             )
                           : Text(
-                              "Pay Now",
+                              lang.paynow,
                               style: TextStyle(
                                 color: AppColors.backGroundColor,
                                 fontSize: 20,
@@ -112,13 +159,13 @@ class PaymentButton extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          // Cart info
+          // CART INFO
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "${cartItems.length} Items",
+                "(${cartItems.length}) ${lang.items}",
                 style: TextStyle(
                   color: AppColors.fontGrey,
                   fontSize: 14,

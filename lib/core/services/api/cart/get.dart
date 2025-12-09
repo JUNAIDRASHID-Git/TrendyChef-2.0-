@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/const/api_endpoints.dart';
+import 'package:trendychef/core/services/api/user/create_guest.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
-
 
 Future<List<CartItemModel>> getCartItems() async {
   final prefs = await SharedPreferences.getInstance();
 
-  final userToken = prefs.getString("idtoken");    // logged-in user
-  final guestId = prefs.getString("guest_id");     // guest user
+  final userToken = prefs.getString("idtoken"); // logged-in user
+  var guestId = prefs.getString("guest_id"); // guest user
 
   try {
     // ---------------------------------------------------
@@ -40,6 +40,11 @@ Future<List<CartItemModel>> getCartItems() async {
     // 🔥 2. IF NO USER → FETCH GUEST CART
     // ---------------------------------------------------
     if (guestId == null || guestId.isEmpty) {
+      guestId = await createGuestUser();
+
+      if (guestId != null) {
+        await prefs.setString("guest_id", guestId);
+      }
       debugPrint("⚠️ No guest ID found");
       return [];
     }
@@ -58,7 +63,6 @@ Future<List<CartItemModel>> getCartItems() async {
       debugPrint("❌ Failed to fetch GUEST cart: ${response.body}");
       return [];
     }
-
   } catch (e, stack) {
     debugPrint("❌ Cart fetch error: $e");
     debugPrint(stack.toString());

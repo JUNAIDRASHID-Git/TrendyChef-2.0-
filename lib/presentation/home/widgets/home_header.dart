@@ -29,7 +29,7 @@ class HomeHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Hala! ${user.name}",
+                    "${lang.hala} ${user.name}",
                     style: TextStyle(fontSize: 20, fontFamily: "inter"),
                   ),
                   Text(

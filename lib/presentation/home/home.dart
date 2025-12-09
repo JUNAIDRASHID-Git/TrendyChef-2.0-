@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
     return ScrollConfiguration(
       behavior: WebScrollBehavior(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.backGroundColor,
         body: SafeArea(
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
@@ -44,36 +44,12 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: 5),
                     HomeHeader(lang: lang, user: state.user),
+                    SizedBox(height: 5),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 50,
-                              child: FakeSearchButton(),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.backGroundColor,
-                              border: Border.all(
-                                color: AppColors.fontColor.withOpacity(0.1),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: AppColors.fontColor.withOpacity(0.7),
-                            ),
-                          ),
-                        ],
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: SizedBox(height: 50, child: FakeSearchButton()),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {

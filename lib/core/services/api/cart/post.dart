@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:trendychef/core/const/api_endpoints.dart'; // baseHost
+import 'package:trendychef/core/services/api/user/create_guest.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 
 /// Add or Update Cart Item (Works for User & Guest)
@@ -13,7 +14,7 @@ Future<CartItemModel?> addOrUpdateCartItem({
   final prefs = await SharedPreferences.getInstance();
 
   final userToken = prefs.getString('idtoken'); // logged-in user token
-  final guestId = prefs.getString('guest_id');  // guest user id
+  var guestId = prefs.getString('guest_id'); // guest user id
 
   try {
     // -----------------------------------------------------------------
@@ -47,6 +48,11 @@ Future<CartItemModel?> addOrUpdateCartItem({
     // 🔥 2. GUEST USER → Hit guest cart API
     // -----------------------------------------------------------------
     if (guestId == null || guestId.isEmpty) {
+      guestId = await createGuestUser();
+
+      if (guestId != null) {
+        await prefs.setString("guest_id", guestId);
+      }
       debugPrint("⚠️ No guest_id found");
       return null;
     }

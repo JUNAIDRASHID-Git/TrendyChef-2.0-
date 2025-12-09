@@ -32,6 +32,9 @@ dependencies:
   lottie: ^3.3.2
   webview_flutter: ^4.13.0
   webview_flutter_android: ^4.10.10
+  webview_flutter_web: ^0.2.2+4
+  go_router: ^17.0.0
+  share_plus: ^12.0.1
 
 dev_dependencies:
   flutter_test:

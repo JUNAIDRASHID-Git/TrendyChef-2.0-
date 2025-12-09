@@ -6,7 +6,7 @@ import 'package:trendychef/core/services/models/category/category.dart';
 
 final Dio _dio = Dio(
   BaseOptions(
-    baseUrl: userCategoryProductsEndpoint,
+    baseUrl: baseHost,
     headers: {'Content-Type': 'application/json; charset=UTF-8'},
     connectTimeout: Duration(milliseconds: 10000),
     receiveTimeout: Duration(milliseconds: 10000),
@@ -15,7 +15,7 @@ final Dio _dio = Dio(
 
 Future<List<CategoryModel>> getAllCategoryWithProducts() async {
   try {
-    final response = await _dio.get('', options: Options());
+    final response = await _dio.get("/public/categories", options: Options());
 
     if (response.statusCode == 200) {
       log("✅ Categories with products fetched successfully");
@@ -28,5 +28,24 @@ Future<List<CategoryModel>> getAllCategoryWithProducts() async {
   } catch (e, st) {
     log("❌ Error fetching category data: $e\n$st");
     rethrow;
+  }
+}
+
+Future<CategoryModel> getCategoryById(String id) async {
+  try {
+    final response = await _dio.get("/public/categories/$id");
+
+    if (response.statusCode == 200) {
+      return CategoryModel.fromJson(response.data);
+    } else if (response.statusCode == 404) {
+      throw Exception("Category not found");
+    } else {
+      throw Exception("Failed to load category");
+    }
+  } on DioException catch (e) {
+    if (e.response?.statusCode == 404) {
+      throw Exception("Category not found");
+    }
+    throw Exception("Network error: ${e.message}");
   }
 }

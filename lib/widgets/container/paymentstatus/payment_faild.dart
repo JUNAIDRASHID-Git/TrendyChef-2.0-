@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
-import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/widgets/nav/bottom_nav.dart';
 
 class PaymentFailedPage extends StatelessWidget {
   const PaymentFailedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context)!;
+    // final lang = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -16,10 +15,7 @@ class PaymentFailedPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.grey),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNav()),
-          ),
+          onPressed: () => context.go("/home"),
         ),
       ),
       body: Center(
@@ -65,10 +61,7 @@ class PaymentFailedPage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BottomNav()),
-                  ),
+                  onPressed: () => context.go("/home"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
@@ -85,10 +78,7 @@ class PaymentFailedPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BottomNav()),
-                ),
+                onPressed: () => context.go("/home"),
                 child: Text(
                   'backtohome',
                   style: TextStyle(

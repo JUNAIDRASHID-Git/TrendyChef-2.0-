@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trendychef/core/const/api_endpoints.dart'; // contains baseHost
+import 'package:trendychef/core/const/api_endpoints.dart';
+import 'package:trendychef/core/services/api/user/create_guest.dart'; // contains baseHost
 
 Future<bool> deleteCartItemUniversal(int productId) async {
   final prefs = await SharedPreferences.getInstance();
 
   final userToken = prefs.getString("idtoken");
-  final guestId = prefs.getString("guest_id");
+  var guestId = prefs.getString("guest_id");
 
   try {
     // --------------------------------------------------------
@@ -37,6 +38,11 @@ Future<bool> deleteCartItemUniversal(int productId) async {
     // 🔥 2. GUEST USER → Delete from Guest Cart
     // --------------------------------------------------------
     if (guestId == null || guestId.isEmpty) {
+      guestId = await createGuestUser();
+
+      if (guestId != null) {
+        await prefs.setString("guest_id", guestId);
+      }
       debugPrint("⚠️ No guest_id found");
       return false;
     }

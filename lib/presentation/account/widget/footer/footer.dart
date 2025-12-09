@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/socila_media/socila_media.dart';
 import 'package:trendychef/widgets/buttons/text/text.dart';
 
@@ -8,8 +9,9 @@ class AccountFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     return Container(
-      height: 160,
+      height: 170,
       width: double.infinity,
       decoration: BoxDecoration(color: AppColors.backGroundColor),
       child: Column(
@@ -18,7 +20,7 @@ class AccountFooter extends StatelessWidget {
         children: [
           SizedBox(height: 10),
           Text(
-            "Follow New Trends With Us",
+            lang.follownewtrendswithus,
             style: TextStyle(
               color: AppColors.bluefont,
               fontWeight: FontWeight.bold,
@@ -40,16 +42,19 @@ class AccountFooter extends StatelessWidget {
                 iconSvgPath: "assets/images/whatsapp-svgrepo-com.svg",
                 onTap: () {},
               ),
+              SizedBox(width: 20),
               SocilaMediaButton(
                 iconSvgPath: "assets/images/tictok-svgrepo-com.svg",
                 onTap: () {},
               ),
+              SizedBox(width: 20),
               SocilaMediaButton(
                 iconSvgPath: "assets/images/instagram-svgrepo-com.svg",
                 onTap: () {},
               ),
             ],
           ),
+          SizedBox(height: 10),
 
           Row(
             mainAxisAlignment: .spaceEvenly,

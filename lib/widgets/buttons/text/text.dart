@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 
 class TextButtonWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class TextButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.pushNamed(context, route);
+        context.push(route);
       },
       child: Text(
         title,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/checkout/check_out.dart';
 import 'package:trendychef/widgets/text/price.dart';
@@ -64,6 +66,7 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     final subtotal = widget.state.totalAmount;
     final subtotalRegular = widget.state.totalRegularAmount;
     final shipping = widget.state.shippingCost;
@@ -105,7 +108,7 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      "Order Summary (${widget.state.items.length} items)",
+                      "${lang.ordersummary}(${widget.state.items.length} ${lang.items})",
                       style: TextStyle(
                         color: AppColors.fontColor,
                         fontWeight: FontWeight.bold,
@@ -118,7 +121,7 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Subtotal",
+                          lang.subtotal,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 14,
@@ -136,7 +139,7 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Shipping",
+                          lang.shipping,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 14,
@@ -196,12 +199,13 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                             child: Row(
                               children: [
                                 Text(
-                                  "Saving ",
+                                  lang.saving,
                                   style: TextStyle(
                                     color: AppColors.primary,
                                     fontSize: 12,
                                   ),
                                 ),
+                                SizedBox(width: 5),
                                 Image.asset(
                                   "assets/images/riyal_logo.png",
                                   color: AppColors.primary,
@@ -228,21 +232,7 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
-                    onTap: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      final userToken = prefs.getString("idtoken");
-
-                      if (userToken == null) {
-                        Navigator.pushNamed(context, "/auth");
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CheckOutScreen(),
-                          ),
-                        );
-                      }
-                    },
+                    onTap: () => context.push('/checkout'),
                     child: Ink(
                       height: 45,
                       width: 160,
@@ -250,9 +240,9 @@ class _CheckOutExpandingWidgetState extends State<CheckOutExpandingWidget>
                         color: AppColors.blue,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          "CHECKOUT",
+                          lang.checkout,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

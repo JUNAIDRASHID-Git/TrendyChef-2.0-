@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:trendychef/widgets/nav/bottom_nav.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({super.key});
@@ -58,12 +58,7 @@ class PaymentSuccessPage extends StatelessWidget {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BottomNav(),
-                              ),
-                            ),
+                            onPressed: () => context.go("/home"),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
@@ -84,10 +79,7 @@ class PaymentSuccessPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       TextButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BottomNav()),
-                        ),
+                        onPressed: () => context.go("/home"),
                         child: Text(
                           'View Orders',
                           style: TextStyle(

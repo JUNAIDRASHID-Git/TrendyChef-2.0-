@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/services/models/product/product_model.dart';
-import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/cart/cart.dart';
 import 'package:trendychef/widgets/cards/image.dart';
+import 'package:trendychef/widgets/text/price.dart';
 import 'package:trendychef/widgets/text/product_name_text.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
+  final String? categoryId;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.categoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,11 @@ class ProductCard extends StatelessWidget {
         ? product.eName
         : product.arName ?? "";
 
-    return SizedBox(
-      width: 190,
+    return GestureDetector(
+      onTap: () =>
+          context.push('/product/${product.id}?categoryId=${categoryId ?? ""}'),
       child: Container(
+        width: 190,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -29,15 +33,11 @@ class ProductCard extends StatelessWidget {
           border: Border.all(color: const Color.fromARGB(80, 238, 238, 238)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ----------------------------------------
-            // STACK: Image + CartButton positioned
-            // ----------------------------------------
             Stack(
               children: [
                 ImageCard(imageUrl: product.image, width: 180, height: 170),
-
                 Positioned(
                   bottom: 6,
                   right: 6,
@@ -63,35 +63,20 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // Product name
-            ProductNameText(productName: productName),
+            SizedBox(
+              height: 50,
+              child: ProductNameText(productName: productName),
+            ),
 
             const SizedBox(height: 10),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: .start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${product.regularPrice.toStringAsFixed(2)} SAR',
-                      style: const TextStyle(
-                        fontFamily: "noto_sans",
-                        fontSize: 14,
-                        color: AppColors.fontColor,
-                      ),
-                    ),
-                    Text(
-                      '${product.salePrice.toStringAsFixed(2)} SAR',
-                      style: const TextStyle(
-                        fontFamily: "noto_sans",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: AppColors.fontColor,
-                      ),
-                    ),
-                  ],
+                PriceTextWidget(
+                  price: product.salePrice,
+                  fontSize: 18,
+                  regularPrice: product.regularPrice,
                 ),
               ],
             ),

@@ -38,7 +38,7 @@ class CartButton extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.fontGrey.withOpacity(0.05),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Center(
@@ -46,7 +46,7 @@ class CartButton extends StatelessWidget {
               'assets/icons/cart.png',
               width: 20,
               height: 20,
-              color: AppColors.primary,
+              color: AppColors.fontColor,
             ),
           ),
         ),

@@ -35,10 +35,10 @@ class _CartScreenState extends State<CartScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Row(
+                        crossAxisAlignment: .center,
                         children: [
                           Text(
                             lang.cart,
@@ -49,9 +49,9 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            "(${items.length} Items)",
+                            "(${items.length} ${lang.items})",
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: AppColors.fontColor.withOpacity(0.6),
                             ),
@@ -81,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                                       children: [
                                         // Main text with styling
                                         Text(
-                                          "Cart Is Empty",
+                                          lang.cartisempty,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,

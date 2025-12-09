@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trendychef/core/services/models/user/user.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
 import 'package:trendychef/presentation/address/cubit/address_cubit.dart';
 import 'package:trendychef/presentation/address/widget/header/address_header.dart';
@@ -88,6 +89,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
   }
 
   Widget _buildContent(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -98,7 +100,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
           // PHONE
           TextInputField(
             controller: phoneController,
-            label: "Phone Number",
+            label: lang.phonenumber,
             hint: "5XXXXXXXX",
             prefix: "+966",
             isPhone: true,
@@ -121,7 +123,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
           // CITY
           TextInputField(
             controller: cityController,
-            label: "City:",
+            label: lang.city,
             onChanged: (_) {},
           ),
 
@@ -130,7 +132,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
           // POSTAL CODE
           TextInputField(
             controller: postalController,
-            label: "Postal Code:",
+            label: lang.postalcode,
             keyboardType: TextInputType.number,
             isPostal: true,
             onChanged: (_) {},
@@ -141,7 +143,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
           // STREET (Expandable)
           TextInputField(
             controller: streetController,
-            label: "Street Address:",
+            label: lang.streetaddress,
             expandable: true,
             maxLines: 5,
             onChanged: (_) {},
@@ -153,7 +155,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
             children: [
               Expanded(
                 child: RoundedButton(
-                  text: "Cancel",
+                  text: lang.cancel,
                   color: AppColors.backGroundColor,
                   textColor: AppColors.fontGrey,
                   onTap: () => Navigator.pop(context),
@@ -161,7 +163,7 @@ class _AddressUpdatingScreenState extends State<AddressUpdatingScreen> {
               ),
               Expanded(
                 child: RoundedButton(
-                  text: "Save",
+                  text: lang.save,
                   color: AppColors.primary,
                   onTap: () {
                     context.read<AddressCubit>().updateAddress(

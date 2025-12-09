@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/services/models/user/user.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
-import 'package:trendychef/widgets/buttons/RoundedButton/roundedbutton.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
+import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
+import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 
 class AccountHeader extends StatelessWidget {
   const AccountHeader({super.key, required this.user});
@@ -9,6 +14,7 @@ class AccountHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     final bool isGuest = user.name == "user";
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
@@ -31,6 +37,18 @@ class AccountHeader extends StatelessWidget {
                     height: 50,
                     width: 50,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 50,
+                        width: 50,
+                        color: Colors.grey.shade200,
+                        child: const Icon(
+                          Icons.person,
+                          size: 30,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
                   ),
                 ),
               if (!isGuest) SizedBox(width: 20),
@@ -38,7 +56,7 @@ class AccountHeader extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   Text(
-                    "Hala ${user.name}",
+                    "${lang.hala} ${user.name}",
                     style: TextStyle(
                       color: AppColors.fontColor,
                       fontWeight: FontWeight.bold,
@@ -48,7 +66,7 @@ class AccountHeader extends StatelessWidget {
                   ),
                   if (isGuest)
                     Text(
-                      "Log in to TrendyChef to view and manage your account",
+                      lang.logintotrendycheftoviewandmanageyouraccount,
                       style: TextStyle(
                         color: AppColors.fontColor,
                         fontWeight: FontWeight.bold,
@@ -70,14 +88,25 @@ class AccountHeader extends StatelessWidget {
               ),
               if (!isGuest) SizedBox(width: 10),
               if (!isGuest)
-                SizedBox(
-                  height: 50,
-                  width: 100,
-                  child: RoundedButton(
-                    text: "Log Out",
-                    onTap: () {},
-                    color: AppColors.red,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.backGroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    final userToken = prefs.getString("idtoken");
+
+                    if (userToken != null) {
+                      prefs.remove("idtoken");
+                    }
+                    context.read<CartCubit>().loadCart();
+                    context.read<AccountBloc>().add(GetUserDetailEvent());
+                  },
+                  child: Text(lang.logout),
                 ),
             ],
           ),
@@ -87,9 +116,7 @@ class AccountHeader extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(14),
-                onTap: () {
-                  Navigator.pushNamed(context, "/auth");
-                },
+                onTap: () => context.push('/auth'),
                 splashColor: AppColors.backGroundColor.withOpacity(0.2),
                 highlightColor: Colors.transparent,
                 child: Ink(
@@ -108,7 +135,7 @@ class AccountHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        "Login in",
+                        lang.login,
                         style: TextStyle(
                           color: AppColors.backGroundColor,
                           fontWeight: FontWeight.bold,

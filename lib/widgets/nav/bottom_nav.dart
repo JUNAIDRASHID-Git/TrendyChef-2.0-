@@ -1,134 +1,133 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/cart/cart.dart';
-import 'package:trendychef/presentation/category/category.dart';
-import 'package:trendychef/presentation/home/home.dart';
-import 'package:trendychef/presentation/account/account.dart';
 
-class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
+class BottomNav extends StatelessWidget {
+  const BottomNav({super.key, required this.child});
 
-  @override
-  State<BottomNav> createState() => _BottomNavState();
-}
-
-class _BottomNavState extends State<BottomNav> {
-  int _selectedIndex = 0;
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    CategoryScreen(),
-    AccountScreen(),
-    CartScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context)!;
+
+    final String location = GoRouterState.of(context).uri.toString();
+
+    int currentIndex = switch (location) {
+      '/home' => 0,
+      '/categories' => 1,
+      '/account' => 2,
+      '/cart' => 3,
+      _ => 0,
+    };
+
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: IndexedStack(index: _selectedIndex, children: _widgetOptions),
+          constraints: BoxConstraints(maxWidth: 1200),
+          child: child,
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 90,
-        decoration: BoxDecoration(
-          color: AppColors.backGroundColor,
-          border: const Border(top: BorderSide(color: Colors.grey, width: 0.5)),
-        ),
-        child: Center(
-          // centers content on large screens
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1200),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildNavItem(
-                      label: "home",
-                      title: lang.home,
-                      index: 0,
-                    ),
-                  ),
-                  Expanded(
-                    child: _buildNavItem(
-                      label: "categories",
-                      title: lang.categories,
-                      index: 1,
-                    ),
-                  ),
-                  Expanded(
-                    child: _buildNavItem(
-                      label: "account",
-                      title: lang.account,
-                      index: 2,
-                    ),
-                  ),
-                  Expanded(
-                    child: _buildNavItem(
-                      label: "cart",
-                      title: lang.cart,
-                      index: 3,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      bottomNavigationBar: _buildBottomNav(context, currentIndex, lang),
+    );
+  }
+
+  Widget _buildBottomNav(
+    BuildContext context,
+    int currentIndex,
+    AppLocalizations lang,
+  ) {
+    return Container(
+      height: 90,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.backGroundColor,
+        border: const Border(
+          top: BorderSide(
+            color: Color.fromARGB(255, 235, 235, 235),
+            width: 0.5,
           ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            _item(
+              context,
+              label: "home",
+              title: lang.home,
+              index: 0,
+              route: "/home",
+              selected: currentIndex == 0,
+            ),
+            _item(
+              context,
+              label: "categories",
+              title: lang.categories,
+              index: 1,
+              route: "/categories",
+              selected: currentIndex == 1,
+            ),
+            _item(
+              context,
+              label: "account",
+              title: lang.account,
+              index: 2,
+              route: "/account",
+              selected: currentIndex == 2,
+            ),
+            _item(
+              context,
+              label: "cart",
+              title: lang.cart,
+              index: 3,
+              route: "/cart",
+              selected: currentIndex == 3,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem({
+  Widget _item(
+    BuildContext context, {
     required String label,
     required int index,
     required String title,
+    required String route,
+    required bool selected,
   }) {
-    final bool isSelected = index == _selectedIndex;
-
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              isSelected
-                  ? "assets/icons/${label.toLowerCase()}.png"
-                  : "assets/icons/${label.toLowerCase()}1.png",
-              width: 24,
-              height: 24,
-              color: isSelected ? AppColors.primary : AppColors.fontColor,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => context.go(route),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                selected
+                    ? "assets/icons/${label.toLowerCase()}.png"
+                    : "assets/icons/${label.toLowerCase()}1.png",
+                width: 24,
+                height: 24,
+                color: selected ? AppColors.primary : AppColors.fontColor,
+              ),
+              Text(
                 title,
                 style: TextStyle(
-                  color: isSelected ? AppColors.primary : AppColors.fontColor,
+                  color: selected ? AppColors.primary : AppColors.fontColor,
                   fontSize: 12,
-                  fontFamily: "inter",
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

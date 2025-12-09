@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
-
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/widgets/nav/bottom_nav.dart';
+import 'package:trendychef/presentation/checkout/check_out.dart';
 
 class PaymentCancelledPage extends StatelessWidget {
   const PaymentCancelledPage({super.key});
@@ -17,12 +17,10 @@ class PaymentCancelledPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.grey),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNav()),
-          ),
+          onPressed: () => context.go("/home"),
         ),
       ),
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -40,7 +38,7 @@ class PaymentCancelledPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                "paymentcancelled",
+                lang.paymentcancelled,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
@@ -49,7 +47,7 @@ class PaymentCancelledPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                "yourpaymentwascancelled",
+                lang.yourpaymentwascancelled,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -64,8 +62,35 @@ class PaymentCancelledPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BottomNav()),
+                    MaterialPageRoute(builder: (context) => CheckOutScreen()),
                   ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.backGroundColor,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: const Color.fromARGB(255, 235, 235, 235),
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    lang.tryagain,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.fontColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/home'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
@@ -75,7 +100,7 @@ class PaymentCancelledPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    "backtohome",
+                    lang.backtohome,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ),

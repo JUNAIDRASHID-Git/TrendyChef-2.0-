@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 
 class AddressHeader extends StatelessWidget {
   const AddressHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -31,9 +33,9 @@ class AddressHeader extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Update Your Delivery Address",
+                  lang.updateyourdeliveryaddress,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -42,7 +44,7 @@ class AddressHeader extends StatelessWidget {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  "Your details help us deliver your order smoothly and on time.",
+                  lang.yourdetailshelpusdeliveryourordersmoothlyandontime,
                   style: TextStyle(fontSize: 14, color: Colors.white70),
                 ),
               ],

@@ -9,8 +9,9 @@ final class AccountLoading extends AccountState {}
 
 final class AccountLoaded extends AccountState {
   final UserModel user;
+  final List<OrderModel> recentOrders;
 
-  AccountLoaded({required this.user});
+  AccountLoaded({required this.user, required this.recentOrders});
 }
 
 final class AccountError extends AccountState {}

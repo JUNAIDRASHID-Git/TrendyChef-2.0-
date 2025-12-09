@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 
 Widget searchField({
   required BuildContext context,
   required TextEditingController controller,
   required ValueChanged<String> onChanged,
 }) {
-  // final lang = AppLocalizations.of(context)!;
-  // final isArabic = lang.localeName != "en";
+  final lang = AppLocalizations.of(context)!;
 
   return ValueListenableBuilder<TextEditingValue>(
     valueListenable: controller,
@@ -34,9 +35,9 @@ Widget searchField({
               color: AppColors.fontColor,
               size: 18,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
-          hintText: "Search",
+          hintText: lang.search,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: AppColors.fontColor.withOpacity(0.1)),
