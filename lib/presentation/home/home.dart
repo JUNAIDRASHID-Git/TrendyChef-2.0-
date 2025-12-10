@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
-import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
-import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/home/bloc/home_bloc.dart';
 import 'package:trendychef/widgets/container/carousel/auto_crousel_slider.dart';
 import 'package:trendychef/presentation/home/widgets/category_view.dart';
@@ -12,6 +9,7 @@ import 'package:trendychef/presentation/home/widgets/home_header.dart';
 import 'package:trendychef/presentation/home/widgets/shimmer.dart';
 import 'dart:ui';
 import 'package:trendychef/widgets/buttons/search/fake_search.dart';
+import 'package:trendychef/widgets/container/error/error_screen.dart';
 
 class WebScrollBehavior extends MaterialScrollBehavior {
   @override
@@ -70,23 +68,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 );
               } else if (state is HomeError) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Text(state.message),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.clear();
-                          context.read<AccountBloc>().add(GetUserDetailEvent());
-                          context.read<CartCubit>().loadCart();
-                          context.read<HomeBloc>().add(LoadHomeData());
-                        },
-                        child: Text("Refresh"),
-                      ),
-                    ],
-                  ),
-                );
+                return ErrorScreen(error: state.message);
               }
               return const SizedBox.shrink();
             },

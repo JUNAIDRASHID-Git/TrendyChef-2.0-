@@ -14,4 +14,8 @@ final class AccountLoaded extends AccountState {
   AccountLoaded({required this.user, required this.recentOrders});
 }
 
-final class AccountError extends AccountState {}
+final class AccountError extends AccountState {
+  final String error;
+
+  AccountError({required this.error});
+}

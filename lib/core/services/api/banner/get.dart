@@ -6,8 +6,8 @@ final Dio dio = Dio(
   BaseOptions(
     baseUrl: baseHost,
     headers: {'Content-Type': 'application/json', 'X-API-KEY': apiKey},
-    connectTimeout: Duration(seconds: 10),
-    receiveTimeout: Duration(seconds: 10),
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
   ),
 );
 
@@ -19,11 +19,9 @@ Future<List<BannerModel>> fetchBanner() async {
       final List<dynamic> data = response.data;
       return data.map((e) => BannerModel.fromJson(e)).toList();
     } else {
-      throw Exception(
-        "Error: ${response.statusCode} - ${response.statusMessage}",
-      );
+      throw Exception("Server error");
     }
-  } catch (e) {
-    throw Exception("Failed to load banners: $e");
+  } catch (_) {
+    throw Exception("Server error");
   }
 }

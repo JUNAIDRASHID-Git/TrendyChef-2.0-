@@ -6,6 +6,7 @@ import 'package:trendychef/presentation/account/widget/guest_view/guest_view.dar
 import 'package:trendychef/presentation/account/widget/header/header.dart';
 import 'package:trendychef/presentation/account/widget/order_widget/order_widget.dart';
 import 'package:trendychef/widgets/buttons/location/location.dart';
+import 'package:trendychef/widgets/container/error/error_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -13,35 +14,56 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sh = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: BlocBuilder<AccountBloc, AccountState>(
-            builder: (context, state) {
-              if (state is AccountLoading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is AccountLoaded) {
-                final user = state.user;
-                if (user.name == "user") {
-                  return GuestAccountScreenView(user: user);
-                }
-                return Column(
-                  children: [
-                    SizedBox(height: 10),
-                    AccountHeader(user: user),
-                    SizedBox(height: 10),
-                    LocationButton(user: user),
-                    SizedBox(height: 10),
-                    RecentOrderWidget(sh: sh, state: state),
-                    SizedBox(height: 10),
-                    AccountFooter(),
-                  ],
-                );
+        child: BlocBuilder<AccountBloc, AccountState>(
+          builder: (context, state) {
+            if (state is AccountLoading) {
+              return SizedBox(
+                height: sh,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (state is AccountError) {
+              return SizedBox(
+                height: sh,
+                child: ErrorScreen(error: "Server error"),
+              );
+            }
+
+            if (state is AccountLoaded) {
+              final user = state.user;
+
+              if (user.name == "user") {
+                return GuestAccountScreenView(user: user);
               }
-              return Container();
-            },
-          ),
+
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 10),
+                    AccountHeader(user: user),
+                    const SizedBox(height: 10),
+                    LocationButton(user: user),
+                    const SizedBox(height: 10),
+                    RecentOrderWidget(sh: sh, state: state),
+                    const SizedBox(height: 10),
+                    const AccountFooter(),
+                  ],
+                ),
+              );
+            }
+
+            // Fallback in case state is unknown
+            return SizedBox(
+              height: sh,
+              child: const Center(child: Text("Something went wrong")),
+            );
+          },
         ),
       ),
     );

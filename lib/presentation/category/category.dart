@@ -5,6 +5,7 @@ import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/category/bloc/category_bloc.dart';
 import 'package:trendychef/presentation/category/widgets/category_product_screen.dart';
 import 'package:trendychef/widgets/buttons/search/fake_search.dart';
+import 'package:trendychef/widgets/container/error/error_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
@@ -12,6 +13,7 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: SafeArea(
@@ -21,21 +23,27 @@ class CategoryScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
-                  child: SizedBox(height: 50, child: FakeSearchButton()),
+                  child: const SizedBox(height: 50, child: FakeSearchButton()),
                 ),
 
                 const SizedBox(height: 10),
 
                 /// Title
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 5,
+                  ),
                   child: Text(
                     lang.categories,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
 
@@ -43,11 +51,15 @@ class CategoryScreen extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<CategoryBloc, CategoryState>(
                     builder: (context, state) {
-                      if (state is! CategoryLoaded) {
-                        return const SizedBox.shrink();
+                      if (state is CategoryError) {
+                        return ErrorScreen(error: "Server error.");
                       }
 
-                      final categories = state.categories;
+                      if (state is! CategoryLoaded) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      final categories = (state).categories;
 
                       return LayoutBuilder(
                         builder: (context, constraints) {
@@ -70,7 +82,7 @@ class CategoryScreen extends StatelessWidget {
                                   crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
-                                  childAspectRatio: 0.80,
+                                  childAspectRatio: 0.8,
                                 ),
                             itemBuilder: (context, index) {
                               final category = categories[index];

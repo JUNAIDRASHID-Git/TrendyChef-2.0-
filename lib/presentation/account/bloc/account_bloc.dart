@@ -17,7 +17,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         final recentOrders = await fetchRecentOrder(user.id);
         emit(AccountLoaded(user: user, recentOrders: recentOrders));
       } catch (e) {
-        emit(AccountError());
+        emit(AccountError(error: e.toString()));
       }
     });
   }
