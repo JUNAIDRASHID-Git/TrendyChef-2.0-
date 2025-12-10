@@ -90,7 +90,7 @@ class PaymentCancelledPage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/home'),
+                  onPressed: () => context.push("/home"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
@@ -101,7 +101,7 @@ class PaymentCancelledPage extends StatelessWidget {
                   ),
                   child: Text(
                     lang.backtohome,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

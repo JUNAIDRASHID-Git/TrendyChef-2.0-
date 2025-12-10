@@ -42,9 +42,13 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (_) => GoogleBloc()),
             BlocProvider(create: (_) => BannerSliderCubit()..loadBanners()),
             BlocProvider(create: (_) => CartCubit()..loadCart()),
-            BlocProvider(create: (_) => AccountBloc()..add(GetUserDetailEvent())),
+            BlocProvider(
+              create: (_) => AccountBloc()..add(GetUserDetailEvent()),
+            ),
             BlocProvider(create: (_) => PaymentBloc()),
-            BlocProvider(create: (_) => CategoryBloc()..add(FetchCategoryData())),
+            BlocProvider(
+              create: (_) => CategoryBloc()..add(FetchCategoryData()),
+            ),
           ],
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,

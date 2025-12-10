@@ -30,7 +30,15 @@ class BottomNav extends StatelessWidget {
           child: child,
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context, currentIndex, lang),
+      bottomNavigationBar: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.backGroundColor, width: 0.5),
+          ),
+        ),
+        child: _buildBottomNav(context, currentIndex, lang),
+      ),
     );
   }
 
@@ -39,55 +47,47 @@ class BottomNav extends StatelessWidget {
     int currentIndex,
     AppLocalizations lang,
   ) {
-    return Container(
-      height: 90,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.backGroundColor,
-        border: const Border(
-          top: BorderSide(
-            color: Color.fromARGB(255, 235, 235, 235),
-            width: 0.5,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            children: [
+              _item(
+                context,
+                label: "home",
+                title: lang.home,
+                index: 0,
+                route: "/home",
+                selected: currentIndex == 0,
+              ),
+              _item(
+                context,
+                label: "categories",
+                title: lang.categories,
+                index: 1,
+                route: "/categories",
+                selected: currentIndex == 1,
+              ),
+              _item(
+                context,
+                label: "account",
+                title: lang.account,
+                index: 2,
+                route: "/account",
+                selected: currentIndex == 2,
+              ),
+              _item(
+                context,
+                label: "cart",
+                title: lang.cart,
+                index: 3,
+                route: "/cart",
+                selected: currentIndex == 3,
+              ),
+            ],
           ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          children: [
-            _item(
-              context,
-              label: "home",
-              title: lang.home,
-              index: 0,
-              route: "/home",
-              selected: currentIndex == 0,
-            ),
-            _item(
-              context,
-              label: "categories",
-              title: lang.categories,
-              index: 1,
-              route: "/categories",
-              selected: currentIndex == 1,
-            ),
-            _item(
-              context,
-              label: "account",
-              title: lang.account,
-              index: 2,
-              route: "/account",
-              selected: currentIndex == 2,
-            ),
-            _item(
-              context,
-              label: "cart",
-              title: lang.cart,
-              index: 3,
-              route: "/cart",
-              selected: currentIndex == 3,
-            ),
-          ],
         ),
       ),
     );

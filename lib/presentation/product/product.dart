@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:trendychef/core/const/api_endpoints.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/services/models/product/product_model.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
@@ -90,6 +92,7 @@ class ProductScreen extends StatelessWidget {
                                           child: _buildImageSection(
                                             context,
                                             product,
+                                            lang,
                                           ),
                                         ),
                                         const SizedBox(width: 60),
@@ -106,7 +109,11 @@ class ProductScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        _buildImageSection(context, product),
+                                        _buildImageSection(
+                                          context,
+                                          product,
+                                          lang,
+                                        ),
                                         const SizedBox(height: 30),
                                         _buildDetailsSection(
                                           context,
@@ -126,7 +133,7 @@ class ProductScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Recommended Products",
+                                        lang.recommendedproducts,
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w600,
@@ -176,7 +183,11 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildImageSection(BuildContext context, ProductModel product) {
+  Widget _buildImageSection(
+    BuildContext context,
+    ProductModel product,
+    AppLocalizations lang,
+  ) {
     return Stack(
       children: [
         ImageCard(imageUrl: product.image, width: double.infinity, height: 400),
@@ -203,10 +214,52 @@ class ProductScreen extends StatelessWidget {
         Positioned(
           right: 12,
           top: 12,
-          child: IconButton(onPressed: () {}, icon: Icon(Icons.share)),
+          child: IconButton(
+            onPressed: () {
+              shareProduct(product, lang);
+            },
+            icon: Icon(Icons.share),
+          ),
         ),
       ],
     );
+  }
+
+  void shareProduct(ProductModel product, AppLocalizations lang) async {
+    final bool isArabic = lang.localeName == "ar";
+
+    // UTM tracking link
+    final String productUrl =
+        "$baseHost/product/${product.id}?utm_source=app&utm_medium=share&utm_campaign=product_trending";
+
+    // Localized product name & description
+    final String productName = isArabic
+        ? (product.arName ?? product.eName)
+        : product.eName;
+
+    // Localized message
+    final String message = isArabic
+        ? """
+🔥 منتج رائج الآن على ترندي شيف!
+
+$productName
+
+$productUrl
+"""
+        : """
+🔥 Check this trending product on TrendyChef!
+
+$productName
+
+$productUrl
+""";
+
+    // Localized subject (some apps show this)
+    final String subject = isArabic
+        ? "🔥 منتج رائج على ترندي شيف"
+        : "🔥 Trending Product on TrendyChef";
+
+    await Share.share(message, subject: subject);
   }
 
   Widget _buildDetailsSection(

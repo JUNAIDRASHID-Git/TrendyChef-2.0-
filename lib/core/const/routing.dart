@@ -12,6 +12,9 @@ import 'package:trendychef/presentation/auth/auth.dart';
 import 'package:trendychef/presentation/product/product.dart';
 import 'package:trendychef/presentation/search/bloc/search_bloc.dart';
 import 'package:trendychef/presentation/search/search.dart';
+import 'package:trendychef/widgets/container/paymentstatus/payment_cancelled.dart';
+import 'package:trendychef/widgets/container/paymentstatus/payment_faild.dart';
+import 'package:trendychef/widgets/container/paymentstatus/payment_success.dart';
 
 // Navigation Shell
 import 'package:trendychef/widgets/nav/bottom_nav.dart';
@@ -48,6 +51,21 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const CartScreen(),
         ),
       ],
+    ),
+
+    GoRoute(
+      path: "/payment/success",
+      builder: (context, state) => const PaymentSuccessPage(),
+    ),
+
+    GoRoute(
+      path: "/payment/cancelled",
+      builder: (context, state) => const PaymentCancelledPage(),
+    ),
+
+    GoRoute(
+      path: "/payment/failed",
+      builder: (context, state) => const PaymentFailedPage(),
     ),
 
     GoRoute(

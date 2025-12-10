@@ -51,5 +51,6 @@
   "paymentcancelled" : "Payment Cancelled",
   "yourpaymentwascancelled" : "Your payment was cancelled",
   "backtohome" : "Back to Home",
-  "tryagain" : "Try agian"
+  "tryagain" : "Try agian",
+  "recommendedproducts" : "Recommended Products"
 }

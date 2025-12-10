@@ -163,4 +163,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tryagain => 'حاول ثانية';
+
+  @override
+  String get recommendedproducts => 'المنتجات الموصى بها';
 }

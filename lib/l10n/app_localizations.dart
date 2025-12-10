@@ -406,6 +406,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try agian'**
   String get tryagain;
+
+  /// No description provided for @recommendedproducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Products'**
+  String get recommendedproducts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

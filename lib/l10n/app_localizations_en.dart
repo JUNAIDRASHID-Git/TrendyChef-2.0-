@@ -163,4 +163,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tryagain => 'Try agian';
+
+  @override
+  String get recommendedproducts => 'Recommended Products';
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
-import 'package:trendychef/presentation/checkout/check_out.dart';
 import 'package:trendychef/widgets/text/price.dart';
 
 class CheckOutExpandingWidget extends StatefulWidget {

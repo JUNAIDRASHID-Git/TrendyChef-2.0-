@@ -1,6 +1,6 @@
-// final baseHost = "http://localhost:8080";
+final baseHost = "http://localhost:8080";
 
-final baseHost = "http://10.0.2.2:8080";
+// final baseHost = "http://10.0.2.2:8080";
 
 final googleAuthEndpoind = "$baseHost/auth/google-user";
 final userProductsEndpoint = "$baseHost/public/products";

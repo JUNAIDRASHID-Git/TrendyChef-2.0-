@@ -112,8 +112,10 @@ class CategoryProductScreen extends StatelessWidget {
                                 crossAxisSpacing: 5,
                                 mainAxisSpacing: 5,
                               ),
-                          itemBuilder: (context, index) =>
-                              ProductCard(product: products[index]),
+                          itemBuilder: (context, index) => ProductCard(
+                            product: products[index],
+                            categoryId: category.iD.toString(),
+                          ),
                         );
                       },
                     ),
