@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    const AutoSlidingBanner(),
+                    AutoSlidingBanner(banners: state.banners),
                     const SizedBox(height: 15),
                     CategoryView(state: state, lang: lang),
                     const SizedBox(height: 20),

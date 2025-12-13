@@ -38,7 +38,10 @@ class AccountScreen extends StatelessWidget {
               final user = state.user;
 
               if (user.name == "user") {
-                return GuestAccountScreenView(user: user);
+                return GuestAccountScreenView(
+                  user: user,
+                  banners: state.banners,
+                );
               }
 
               return SingleChildScrollView(

@@ -1,141 +1,168 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:trendychef/widgets/container/carousel/cubit/carousel_cubit.dart';
+import 'package:trendychef/core/services/models/banner/banner.dart';
 
-class AutoSlidingBanner extends StatelessWidget {
-  const AutoSlidingBanner({super.key});
+class AutoSlidingBanner extends StatefulWidget {
+  final List<BannerModel> banners;
+  final double aspectRatio;
+
+  const AutoSlidingBanner({
+    super.key,
+    required this.banners,
+    this.aspectRatio = 16 / 7,
+  });
+
+  @override
+  State<AutoSlidingBanner> createState() => _AutoSlidingBannerState();
+}
+
+class _AutoSlidingBannerState extends State<AutoSlidingBanner> {
+  late final PageController _controller;
+  Timer? _autoScrollTimer;
+  int _currentPage = 1; // Start at 1 because of loop padding
+
+  List<BannerModel> get _loopedBanners {
+    if (widget.banners.length >= 2) {
+      return [widget.banners.last, ...widget.banners, widget.banners.first];
+    }
+    return widget.banners;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(
+      viewportFraction: 0.9,
+      initialPage: _currentPage,
+    );
+
+    if (widget.banners.length >= 2) _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!_controller.hasClients) return;
+
+      int nextPage = _currentPage + 1;
+      _controller.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  void _pauseAutoScroll() {
+    _autoScrollTimer?.cancel();
+    // resume after 5 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) _startAutoScroll();
+    });
+  }
+
+  void _handlePageChanged(int index) {
+    setState(() => _currentPage = index);
+
+    // Infinite loop logic
+    if (index == 0) {
+      Future.delayed(const Duration(milliseconds: 350), () {
+        if (_controller.hasClients) {
+          _controller.jumpToPage(_loopedBanners.length - 2);
+        }
+      });
+    } else if (index == _loopedBanners.length - 1) {
+      Future.delayed(const Duration(milliseconds: 350), () {
+        if (_controller.hasClients) _controller.jumpToPage(1);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BannerSliderCubit, BannerSliderState>(
-      builder: (context, state) {
-        final cubit = context.read<BannerSliderCubit>();
-        final loopedBanners = state.banners;
-        final isLoading = state.isLoading;
+    if (widget.banners.isEmpty) {
+      return AspectRatio(
+        aspectRatio: widget.aspectRatio,
+        child: const Center(child: Text("No banners found")),
+      );
+    }
 
-        const double aspectRatio = 16 / 7;
+    if (_loopedBanners.isEmpty) {
+      return BannerSkeleton(aspectRatio: widget.aspectRatio);
+    }
 
-        if (isLoading) {
-          return const BannerSkeleton(aspectRatio: aspectRatio);
-        }
+    return AspectRatio(
+      aspectRatio: widget.aspectRatio,
+      child: GestureDetector(
+        onTapDown: (_) => _pauseAutoScroll(),
+        onPanDown: (_) => _pauseAutoScroll(),
+        child: PageView.builder(
+          controller: _controller,
+          itemCount: _loopedBanners.length,
+          onPageChanged: _handlePageChanged,
+          itemBuilder: (context, i) {
+            final banner = _loopedBanners[i];
 
-        if (loopedBanners.isEmpty) {
-          return const AspectRatio(
-            aspectRatio: aspectRatio,
-            child: Center(child: Text("No banners found")),
-          );
-        }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: () {
+                    if (banner.url.isEmpty) return;
 
-        return AspectRatio(
-          aspectRatio: aspectRatio,
-          child: Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  controller: cubit.controller,
-                  itemCount: loopedBanners.length,
-                  onPageChanged: (index) {
-                    cubit.updatePage(index);
-                    // Looping logic for infinite scroll
-                    if (index == 0) {
-                      Future.delayed(const Duration(milliseconds: 350), () {
-                        cubit.controller.jumpToPage(loopedBanners.length - 2);
-                      });
-                    } else if (index == loopedBanners.length - 1) {
-                      Future.delayed(const Duration(milliseconds: 350), () {
-                        cubit.controller.jumpToPage(1);
-                      });
+                    try {
+                      final uri = Uri.parse(banner.url);
+                      if (uri.path.contains('/product') &&
+                          uri.queryParameters['id'] != null) {
+                        final productId = uri.queryParameters['id']!;
+                        context.push("/product/$productId");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Invalid product link')),
+                        );
+                      }
+                    } catch (_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Could not parse link')),
+                      );
                     }
                   },
-                  itemBuilder: (_, i) {
-                    final banner = loopedBanners[i];
-                    final imageUrl = banner.imageUrl;
-                    final redirectUrl = banner.url;
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: InkWell(
-                          onTap: redirectUrl.isNotEmpty
-                              ? () {
-                                  try {
-                                    final uri = Uri.parse(redirectUrl);
-                                    if (uri.path.contains('/product') &&
-                                        uri.queryParameters['id'] != null) {
-                                      final productId =
-                                          uri.queryParameters['id']!;
-                                      context.push("/product/$productId");
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Invalid product link'),
-                                        ),
-                                      );
-                                    }
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Could not parse link'),
-                                      ),
-                                    );
-                                  }
-                                }
-                              : null,
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.fill,
-                            frameBuilder: (context, child, frame, wasSync) {
-                              if (wasSync) return child;
-                              return AnimatedOpacity(
-                                opacity: frame == null ? 0 : 1,
-                                duration: const Duration(milliseconds: 500),
-                                child: child,
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                            errorBuilder: (_, _, _) => Container(
-                              color: Colors.grey.shade300,
-                              child: const Center(child: Icon(Icons.error)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                  child: Image.network(
+                    banner.imageUrl,
+                    fit: BoxFit.fill,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    errorBuilder: (_, _, _) => Container(
+                      color: Colors.grey.shade300,
+                      child: const Center(child: Icon(Icons.error)),
+                    ),
+                    frameBuilder: (context, child, frame, wasSync) {
+                      if (wasSync) return child;
+                      return AnimatedOpacity(
+                        opacity: frame == null ? 0 : 1,
+                        duration: const Duration(milliseconds: 500),
+                        child: child,
+                      );
+                    },
+                  ),
                 ),
               ),
-              // Page Indicator
-              // SizedBox(height: 8),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: List.generate(loopedBanners.length - 2, (i) {
-              //     final isActive = (currentPage - 1) == i;
-              //     return AnimatedContainer(
-              //       duration: const Duration(milliseconds: 300),
-              //       margin: const EdgeInsets.symmetric(horizontal: 4),
-              //       height: 8,
-              //       width: isActive ? 24 : 8,
-              //       decoration: BoxDecoration(
-              //         color: isActive ? AppColors.secondary : AppColors.primary,
-              //         borderRadius: BorderRadius.circular(4),
-              //       ),
-              //     );
-              //   }),
-              // ),
-            ],
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }
