@@ -35,23 +35,26 @@ class BottomNav extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
-      body: IndexedStack(
-        index: currentIndex,
-        children: const [
-          HomeScreen(),
-          CategoryScreen(),
-          AccountScreen(),
-          CartScreen(),
-        ],
+      // Wrap body in Center + ConstrainedBox to limit max width
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: IndexedStack(
+            index: currentIndex,
+            children: const [
+              HomeScreen(),
+              CategoryScreen(),
+              AccountScreen(),
+              CartScreen(),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: const _BottomNavBar(),
     );
   }
 }
 
-/// =======================
-/// Bottom Navigation Bar
-/// =======================
 class _BottomNavBar extends StatelessWidget {
   const _BottomNavBar();
 

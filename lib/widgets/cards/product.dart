@@ -33,7 +33,7 @@ class ProductCard extends StatelessWidget {
           border: Border.all(color: const Color.fromARGB(190, 238, 238, 238)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ImageCard(imageUrl: product.image, width: 150, height: 150),
 

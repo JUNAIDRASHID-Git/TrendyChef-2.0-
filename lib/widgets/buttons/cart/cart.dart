@@ -22,7 +22,7 @@ class CartButton extends StatelessWidget {
           return QuantityControllerWidget(
             productId: item.productId,
             height: 40,
-            width: double.infinity,
+            width: 290,
           );
         }
 
@@ -35,7 +35,7 @@ class CartButton extends StatelessWidget {
               await context.read<CartCubit>().addToCart(item.productId);
             },
             child: Container(
-              width: double.infinity,
+              width: 390,
               height: 40,
               decoration: BoxDecoration(
                 color: AppColors.primary,

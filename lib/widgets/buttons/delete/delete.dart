@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 
 class DeleteButton extends StatelessWidget {
@@ -22,8 +23,8 @@ class DeleteButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: AppColors.fontColor.withOpacity(0.2)),
           ),
-          child: Image.asset(
-            'assets/icons/trash.png',
+          child: SvgPicture.asset(
+            'assets/icons/trash.svg',
             width: 22,
             height: 22,
             color: AppColors.fontColor,

@@ -60,10 +60,9 @@ class HomeScreen extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: const Expanded(
-              child: SizedBox(height: 50, child: FakeSearchButton()),
-            ),
+            child: SizedBox(height: 50, child: FakeSearchButton()),
           ),
+
           const SizedBox(height: 20),
 
           Expanded(
