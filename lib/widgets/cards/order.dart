@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trendychef/core/const/api_endpoints.dart';
 import 'package:trendychef/core/services/models/order/order.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/core/theme/order_status.dart';
@@ -54,7 +55,7 @@ class OrderCard extends StatelessWidget {
             children: [
               Row(children: [buildStatusChip(order.status, context)]),
               Text(
-                "Expect on: 12-09-2025",
+                lang.deliverywithin,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -79,7 +80,7 @@ class OrderCard extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
-                            item.productImage,
+                            baseHost + item.productImage,
                             width: 50,
                             height: 50,
                             fit: BoxFit.cover,

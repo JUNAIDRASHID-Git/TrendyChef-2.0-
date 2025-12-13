@@ -16,13 +16,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadHomeData>((event, emit) async {
       emit(HomeLoading());
       try {
-        final user = await getUser();
-        final banners = await fetchBanner();
-        final categories = await getAllCategoryWithProducts();
+        final results = await Future.wait([
+          getUser(),
+          fetchBanner(),
+          getAllCategoryWithProducts(),
+        ]);
+
+        // Unpack the results in the correct order
+        final UserModel user = results[0] as UserModel;
+        final List<BannerModel> banners = results[1] as List<BannerModel>;
+        final List<CategoryModel> categories = results[2] as List<CategoryModel>;
 
         emit(HomeLoaded(categories: categories, banners: banners, user: user));
       } catch (e) {
-        emit(HomeError(message: e.toString()));
+        if (e is Exception) {
+          emit(HomeError(message: e.toString()));
+        } else {
+          emit(HomeError(message: 'An unknown error occurred: $e'));
+        }
       }
     });
   }

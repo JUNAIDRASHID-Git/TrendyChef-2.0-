@@ -13,7 +13,7 @@ class ProductNameText extends StatelessWidget {
       style: const TextStyle(
         fontFamily: "inter",
         fontWeight: FontWeight.w500,
-        fontSize: 16,
+        fontSize: 14,
         color: AppColors.fontColor,
       ),
       maxLines: 2,

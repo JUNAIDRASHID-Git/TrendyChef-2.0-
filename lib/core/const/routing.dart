@@ -12,6 +12,7 @@ import 'package:trendychef/presentation/auth/auth.dart';
 import 'package:trendychef/presentation/product/product.dart';
 import 'package:trendychef/presentation/search/bloc/search_bloc.dart';
 import 'package:trendychef/presentation/search/search.dart';
+import 'package:trendychef/presentation/splash/splash.dart';
 import 'package:trendychef/widgets/container/paymentstatus/payment_cancelled.dart';
 import 'package:trendychef/widgets/container/paymentstatus/payment_faild.dart';
 import 'package:trendychef/widgets/container/paymentstatus/payment_success.dart';
@@ -23,8 +24,14 @@ import 'package:trendychef/widgets/policy/return_policy.dart';
 import 'package:trendychef/widgets/policy/terms_and_conditions.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
+    GoRoute(
+      path: '/',
+      name: 'splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
+
     ShellRoute(
       builder: (context, state, child) {
         return BottomNav(child: child);
@@ -54,17 +61,17 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(
-      path: "/payment/success",
+      path: "/payment-success",
       builder: (context, state) => const PaymentSuccessPage(),
     ),
 
     GoRoute(
-      path: "/payment/cancelled",
+      path: "/payment-cancelled",
       builder: (context, state) => const PaymentCancelledPage(),
     ),
 
     GoRoute(
-      path: "/payment/failed",
+      path: "/payment-failed",
       builder: (context, state) => const PaymentFailedPage(),
     ),
 
@@ -131,4 +138,6 @@ final GoRouter router = GoRouter(
       },
     ),
   ],
+
+  errorBuilder: (context, state) => const HomeScreen(),
 );

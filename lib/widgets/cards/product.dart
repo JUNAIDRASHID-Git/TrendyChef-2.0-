@@ -5,8 +5,8 @@ import 'package:trendychef/core/services/models/product/product_model.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/cart/cart.dart';
 import 'package:trendychef/widgets/cards/image.dart';
-import 'package:trendychef/widgets/text/price.dart';
 import 'package:trendychef/widgets/text/product_name_text.dart';
+import 'package:trendychef/widgets/text/regular_price.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -30,55 +30,51 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color.fromARGB(80, 238, 238, 238)),
+          border: Border.all(color: const Color.fromARGB(190, 238, 238, 238)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                ImageCard(imageUrl: product.image, width: 180, height: 170),
-                Positioned(
-                  bottom: 6,
-                  right: 6,
-                  child: CartButton(
-                    item: CartItemModel(
-                      id: product.id!,
-                      cartId: 1,
-                      productId: product.id!,
-                      productImage: product.image,
-                      productEName: product.eName,
-                      productArName: product.arName ?? product.eName,
-                      stock: product.stock,
-                      productSalePrice: product.salePrice,
-                      productRegularPrice: product.regularPrice,
-                      weight: product.weight,
-                      quantity: 1,
-                      addedAt: DateTime.now(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            ImageCard(imageUrl: product.image, width: 180, height: 170),
 
             const SizedBox(height: 10),
 
             SizedBox(
-              height: 50,
+              height: 40,
               child: ProductNameText(productName: productName),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
 
-            Column(
+            Row(
               crossAxisAlignment: .start,
+              mainAxisAlignment: .spaceBetween,
               children: [
-                PriceTextWidget(
-                  price: product.salePrice,
-                  fontSize: 18,
+                RegularPriceWidget(
                   regularPrice: product.regularPrice,
+                  fontSize: 18,
                 ),
+                Text("${product.weight} kg"),
               ],
+            ),
+
+            const SizedBox(height: 5),
+
+            CartButton(
+              item: CartItemModel(
+                id: product.id!,
+                cartId: 1,
+                productId: product.id!,
+                productImage: product.image,
+                productEName: product.eName,
+                productArName: product.arName ?? product.eName,
+                stock: product.stock,
+                productSalePrice: product.salePrice,
+                productRegularPrice: product.regularPrice,
+                weight: product.weight,
+                quantity: 1,
+                addedAt: DateTime.now(),
+              ),
             ),
           ],
         ),

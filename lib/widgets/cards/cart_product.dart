@@ -74,27 +74,27 @@ class CartProductCard extends StatelessWidget {
                           color: AppColors.fontColor,
                         ),
                       ),
+                      SizedBox(height: 10),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          QuantityControllerWidget(
+                            productId: product.productId,
+                            height: 30,
+                            width: 80,
+                          ),
+
+                          DeleteButton(
+                            onTap: () {
+                              final cubit = context.read<CartCubit>();
+                              cubit.removeFromCart(product.productId);
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 5),
-
-            /// ---------- QUANTITY + DELETE ----------
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
-                  child: QuantityControllerWidget(productId: product.productId),
-                ),
-
-                DeleteButton(
-                  onTap: () {
-                    final cubit = context.read<CartCubit>();
-                    cubit.removeFromCart(product.productId);
-                  },
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trendychef/core/const/api_endpoints.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/checkout/bloc/checkout_bloc.dart';
@@ -85,7 +86,7 @@ class CheckOutScreen extends StatelessWidget {
                                           crossAxisAlignment: .center,
                                           children: [
                                             Image.network(
-                                              item.productImage,
+                                              baseHost + item.productImage,
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.cover,

@@ -1,133 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
+import 'package:trendychef/presentation/account/account.dart';
+import 'package:trendychef/presentation/cart/cart.dart';
+import 'package:trendychef/presentation/category/category.dart';
+import 'package:trendychef/presentation/home/home.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key, required this.child});
 
   final Widget child;
 
+  int _locationToIndex(String location) {
+    switch (location) {
+      case '/home':
+        return 0;
+      case '/categories':
+        return 1;
+      case '/account':
+        return 2;
+      case '/cart':
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final lang = AppLocalizations.of(context)!;
-
-    final String location = GoRouterState.of(context).uri.toString();
-
-    int currentIndex = switch (location) {
-      '/home' => 0,
-      '/categories' => 1,
-      '/account' => 2,
-      '/cart' => 3,
-      _ => 0,
-    };
+    final location = GoRouterState.of(context).uri.path;
+    final currentIndex = _locationToIndex(location);
 
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 1200),
-          child: child,
-        ),
+      body: IndexedStack(
+        index: currentIndex,
+        children: const [
+          HomeScreen(),
+          CategoryScreen(),
+          AccountScreen(),
+          CartScreen(),
+        ],
       ),
-      bottomNavigationBar: Container(
-        height: 90,
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: AppColors.backGroundColor, width: 0.5),
-          ),
-        ),
-        child: _buildBottomNav(context, currentIndex, lang),
-      ),
+      bottomNavigationBar: const _BottomNavBar(),
     );
   }
+}
 
-  Widget _buildBottomNav(
-    BuildContext context,
-    int currentIndex,
-    AppLocalizations lang,
-  ) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1200),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              _item(
-                context,
-                label: "home",
-                title: lang.home,
-                index: 0,
-                route: "/home",
-                selected: currentIndex == 0,
-              ),
-              _item(
-                context,
-                label: "categories",
-                title: lang.categories,
-                index: 1,
-                route: "/categories",
-                selected: currentIndex == 1,
-              ),
-              _item(
-                context,
-                label: "account",
-                title: lang.account,
-                index: 2,
-                route: "/account",
-                selected: currentIndex == 2,
-              ),
-              _item(
-                context,
-                label: "cart",
-                title: lang.cart,
-                index: 3,
-                route: "/cart",
-                selected: currentIndex == 3,
-              ),
-            ],
+/// =======================
+/// Bottom Navigation Bar
+/// =======================
+class _BottomNavBar extends StatelessWidget {
+  const _BottomNavBar();
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+    final location = GoRouterState.of(context).uri.path;
+
+    return Container(
+      height: 80,
+      decoration: BoxDecoration(
+        color: AppColors.backGroundColor,
+        border: Border(
+          top: BorderSide(
+            color: AppColors.fontColor.withOpacity(0.1),
+            width: 0.5,
           ),
         ),
       ),
-    );
-  }
-
-  Widget _item(
-    BuildContext context, {
-    required String label,
-    required int index,
-    required String title,
-    required String route,
-    required bool selected,
-  }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => context.go(route),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                selected
-                    ? "assets/icons/${label.toLowerCase()}.png"
-                    : "assets/icons/${label.toLowerCase()}1.png",
-                width: 24,
-                height: 24,
-                color: selected ? AppColors.primary : AppColors.fontColor,
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                  color: selected ? AppColors.primary : AppColors.fontColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                BottomNavItem(
+                  label: 'home',
+                  title: lang.home,
+                  route: '/home',
+                  selected: location == '/home',
                 ),
-              ),
-            ],
+                BottomNavItem(
+                  label: 'category',
+                  title: lang.categories,
+                  route: '/categories',
+                  selected: location == '/categories',
+                ),
+                BottomNavItem(
+                  label: 'profile',
+                  title: lang.account,
+                  route: '/account',
+                  selected: location == '/account',
+                ),
+                BottomNavItem(
+                  label: 'cart',
+                  title: lang.cart,
+                  route: '/cart',
+                  selected: location == '/cart',
+                ),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// =======================
+/// Bottom Nav Item
+/// =======================
+class BottomNavItem extends StatelessWidget {
+  const BottomNavItem({
+    super.key,
+    required this.label,
+    required this.title,
+    required this.route,
+    required this.selected,
+  });
+
+  final String label;
+  final String title;
+  final String route;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color color = selected ? AppColors.primary : AppColors.fontColor;
+
+    final String iconPath = selected
+        ? 'assets/icons/$label.svg'
+        : 'assets/icons/${label}1.svg';
+
+    return InkWell(
+      onTap: () {
+        if (!selected) {
+          context.go(route);
+        }
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              iconPath,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              title,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
     );

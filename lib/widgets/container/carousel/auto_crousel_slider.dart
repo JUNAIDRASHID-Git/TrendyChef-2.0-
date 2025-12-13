@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:trendychef/widgets/container/carousel/cubit/carousel_cubit.dart';
 
@@ -64,6 +65,9 @@ class AutoSlidingBanner extends StatelessWidget {
                                     final uri = Uri.parse(redirectUrl);
                                     if (uri.path.contains('/product') &&
                                         uri.queryParameters['id'] != null) {
+                                      final productId =
+                                          uri.queryParameters['id']!;
+                                      context.push("/product/$productId");
                                     } else {
                                       ScaffoldMessenger.of(
                                         context,

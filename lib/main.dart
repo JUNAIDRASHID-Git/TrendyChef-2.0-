@@ -15,6 +15,8 @@ import 'package:trendychef/widgets/container/carousel/cubit/carousel_cubit.dart'
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/presentation/account/bloc/account_bloc.dart';
 import 'package:trendychef/presentation/category/bloc/category_bloc.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,8 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  usePathUrlStrategy();
 
   runApp(BlocProvider(create: (_) => LocaleCubit(), child: const MyApp()));
 }

@@ -5,7 +5,15 @@ import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 
 class QuantityControllerWidget extends StatelessWidget {
   final int productId;
-  const QuantityControllerWidget({super.key, required this.productId});
+  final double height;
+  final double width;
+
+  const QuantityControllerWidget({
+    super.key,
+    required this.productId,
+    required this.height,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,41 +23,62 @@ class QuantityControllerWidget extends StatelessWidget {
         final qty = cubit.getQuantity(productId);
         final stock = cubit.getStock(productId);
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.fontGrey.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              InkWell(
-                onTap: qty > 1
-                    ? () => cubit.decrease(productId)
-                    : () => cubit.removeFromCart(productId),
-                child: Icon(Icons.remove, size: 14, color: AppColors.fontColor),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                qty.toString(),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+        final iconSize = height * 0.45;
+        final textSize = height * 0.4;
+        final spacing = width * 0.08;
+
+        return SizedBox(
+          width: width,
+          height: height,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: width * 0.06),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(height * 0.2),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                /// Decrease
+                InkWell(
+                  onTap: qty > 1
+                      ? () => cubit.decrease(productId)
+                      : () => cubit.removeFromCart(productId),
+                  child: Icon(
+                    Icons.remove,
+                    size: iconSize,
+                    color: AppColors.backGroundColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              InkWell(
-                onTap: qty < stock ? () => cubit.increase(productId) : null,
-                child: Icon(
-                  Icons.add,
-                  size: 14,
-                  color: qty < stock
-                      ? AppColors.fontColor
-                      : Colors.grey.shade400,
+
+                SizedBox(width: spacing),
+
+                /// Quantity
+                Text(
+                  qty.toString(),
+                  style: TextStyle(
+                    fontSize: textSize,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.backGroundColor,
+                  ),
                 ),
-              ),
-            ],
+
+                SizedBox(width: spacing),
+
+                /// Increase
+                InkWell(
+                  onTap: qty < stock ? () => cubit.increase(productId) : null,
+                  child: Icon(
+                    Icons.add,
+                    size: iconSize,
+                    color: qty < stock
+                        ? AppColors.backGroundColor
+                        : Colors.grey.shade400,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:trendychef/core/const/api_endpoints.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
 import 'package:trendychef/core/services/models/product/product_model.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
@@ -70,7 +69,11 @@ class ProductScreen extends StatelessWidget {
                               // Back Button
                               IconButton(
                                 onPressed: () {
-                                  context.pop();
+                                  if (GoRouter.of(context).canPop()) {
+                                    context.pop();
+                                  } else {
+                                    context.go('/home');
+                                  }
                                 },
                                 icon: Icon(
                                   Icons.arrow_back_ios_new_rounded,
@@ -228,33 +231,33 @@ class ProductScreen extends StatelessWidget {
   void shareProduct(ProductModel product, AppLocalizations lang) async {
     final bool isArabic = lang.localeName == "ar";
 
-    // UTM tracking link
-    final String productUrl =
-        "$baseHost/product/${product.id}?utm_source=app&utm_medium=share&utm_campaign=product_trending";
+    // OG preview link (used by WhatsApp/Facebook)
+    final String ogUrl =
+        "https://server.trendy-c.com/public/og/products/${product.id}";
 
-    // Localized product name & description
+    // Localized product name
     final String productName = isArabic
         ? (product.arName ?? product.eName)
         : product.eName;
 
-    // Localized message
+    // Message to share
     final String message = isArabic
         ? """
 🔥 منتج رائج الآن على ترندي شيف!
 
 $productName
 
-$productUrl
+$ogUrl
 """
         : """
 🔥 Check this trending product on TrendyChef!
 
 $productName
 
-$productUrl
+$ogUrl
 """;
 
-    // Localized subject (some apps show this)
+    // Subject for apps that show it
     final String subject = isArabic
         ? "🔥 منتج رائج على ترندي شيف"
         : "🔥 Trending Product on TrendyChef";
