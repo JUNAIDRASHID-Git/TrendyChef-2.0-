@@ -64,7 +64,7 @@ class _BottomNavBar extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
 
     return Container(
-      height: 80,
+      height: 90,
       decoration: BoxDecoration(
         color: AppColors.backGroundColor,
         border: Border(

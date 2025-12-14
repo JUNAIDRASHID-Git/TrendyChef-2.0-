@@ -1,12 +1,12 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class PaymentPageWeb extends StatefulWidget {
-  final String url;
+  final String paymentUrl;
 
-  const PaymentPageWeb({required this.url, super.key});
+  const PaymentPageWeb({required this.paymentUrl, super.key});
 
   @override
   State<PaymentPageWeb> createState() => _PaymentPageWebState();
@@ -16,31 +16,15 @@ class _PaymentPageWebState extends State<PaymentPageWeb> {
   @override
   void initState() {
     super.initState();
-
-    // Open payment page in new browser tab
-    html.window.open(widget.url, "_blank");
-
-    // Listen for messages from the payment gateway
-    html.window.onMessage.listen((event) {
-      final data = event.data.toString().toLowerCase();
-
-      if (data.contains("success")) {
-        context.go("/payment/success");
-      } else if (data.contains("cancel")) {
-        context.go("/payment/cancelled");
-      } else if (data.contains("failed")) {
-        context.go("/payment/failed");
-      }
-    });
+    html.window.location.href = widget.paymentUrl;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Payment")),
-      body: const Center(
+    return const Scaffold(
+      body: Center(
         child: Text(
-          "Payment page opened in a new tab...\nPlease complete payment.",
+          'Redirecting to payment...\nPlease wait',
           textAlign: TextAlign.center,
         ),
       ),

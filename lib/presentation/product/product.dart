@@ -194,26 +194,7 @@ class ProductScreen extends StatelessWidget {
     return Stack(
       children: [
         ImageCard(imageUrl: product.image, width: double.infinity, height: 400),
-        Positioned(
-          right: 12,
-          bottom: 12,
-          child: CartButton(
-            item: CartItemModel(
-              id: product.id!,
-              cartId: 1,
-              productId: product.id!,
-              productImage: product.image,
-              productEName: product.eName,
-              productArName: product.arName ?? product.eName,
-              stock: product.stock,
-              productSalePrice: product.salePrice,
-              productRegularPrice: product.regularPrice,
-              weight: product.weight,
-              quantity: 1,
-              addedAt: DateTime.now(),
-            ),
-          ),
-        ),
+
         Positioned(
           right: 12,
           top: 12,
@@ -286,6 +267,22 @@ $ogUrl
           fontSize: 24,
         ),
         const SizedBox(height: 24),
+        CartButton(
+          item: CartItemModel(
+            id: product.id!,
+            cartId: 1,
+            productId: product.id!,
+            productImage: product.image,
+            productEName: product.eName,
+            productArName: product.arName ?? product.eName,
+            stock: product.stock,
+            productSalePrice: product.salePrice,
+            productRegularPrice: product.regularPrice,
+            weight: product.weight,
+            quantity: 1,
+            addedAt: DateTime.now(),
+          ),
+        ),
         Text(
           isArabic
               ? (product.arDescription ?? "")

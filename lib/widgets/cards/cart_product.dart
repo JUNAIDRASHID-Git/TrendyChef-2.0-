@@ -36,17 +36,15 @@ class CartProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// ---------- PRODUCT IMAGE ----------
             Row(
               children: [
                 ImageCard(
                   imageUrl: product.productImage,
-                  width: 150, // Responsive width
+                  width: 140, // Responsive width
                   height: 140,
                 ),
                 const SizedBox(width: 12),
 
-                /// ---------- PRODUCT INFO + ACTIONS ----------
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

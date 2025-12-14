@@ -7,7 +7,7 @@ import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/checkout/bloc/checkout_bloc.dart';
 import 'package:trendychef/widgets/buttons/payment/bloc/payment_bloc.dart';
-import 'package:trendychef/widgets/container/payment_web_view/payment_page_web.dart';
+import 'package:trendychef/widgets/container/payment_web_view/payment_page_mobile.dart';
 import 'package:trendychef/widgets/text/price.dart';
 
 class PaymentButton extends StatelessWidget {
@@ -72,22 +72,22 @@ class PaymentButton extends StatelessWidget {
                 if (paymentstate is PaymentLoaded) {
                   log(paymentstate.paymentUrl);
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          PaymentPageWeb(url: paymentstate.paymentUrl),
-                    ),
-                  );
-
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
-                  //     builder: (_) => PaymentPageMobile(
-                  //       paymentUrl: paymentstate.paymentUrl,
-                  //     ),
+                  //     builder: (_) =>
+                  //         PaymentPageWeb(paymentUrl: paymentstate.paymentUrl),
                   //   ),
                   // );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PaymentPageMobile(
+                        paymentUrl: paymentstate.paymentUrl,
+                      ),
+                    ),
+                  );
                 }
               },
               builder: (context, paymentstate) {

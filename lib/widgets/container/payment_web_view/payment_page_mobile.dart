@@ -59,10 +59,11 @@ class _PaymentPageMobileState extends State<PaymentPageMobile> {
     if (kIsWeb) return const SizedBox();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Payment")),
-      body: _controller == null
-          ? const Center(child: CircularProgressIndicator())
-          : WebViewWidget(controller: _controller!),
+      body: SafeArea(
+        child: _controller == null
+            ? const Center(child: CircularProgressIndicator())
+            : WebViewWidget(controller: _controller!),
+      ),
     );
   }
 }
