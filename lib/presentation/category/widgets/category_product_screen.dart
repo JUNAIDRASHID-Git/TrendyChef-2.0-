@@ -114,7 +114,7 @@ class CategoryProductScreen extends StatelessWidget {
                               ),
                           itemBuilder: (context, index) => ProductCard(
                             product: products[index],
-                            categoryId: category.iD.toString(),
+                            categoryId: category.id.toString(),
                           ),
                         );
                       },

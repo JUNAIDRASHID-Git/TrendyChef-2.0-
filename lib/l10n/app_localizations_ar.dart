@@ -166,4 +166,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recommendedproducts => 'المنتجات الموصى بها';
+
+  @override
+  String get paymenhistory => 'تاريخ الدفع';
+
+  @override
+  String get dateoforder => 'تاريخ الطلب';
+
+  @override
+  String get paymentstatus => 'حالة الدفع';
+
+  @override
+  String get orderstatus => 'حالة الطلب';
+
+  @override
+  String get kg => 'كجم';
+
+  @override
+  String get qty => 'كمية';
 }

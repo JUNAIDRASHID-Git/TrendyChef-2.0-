@@ -52,5 +52,11 @@
   "yourpaymentwascancelled" : "Your payment was cancelled",
   "backtohome" : "Back to Home",
   "tryagain" : "Try agian",
-  "recommendedproducts" : "Recommended Products"
+  "recommendedproducts" : "Recommended Products",
+  "paymenhistory" : "Payment History",
+  "dateoforder" : "Date of Order",
+  "paymentstatus" : "Payment status",
+  "orderstatus" : "Order status",
+  "kg" : "kg",
+   "qty" : "Qty"
 }

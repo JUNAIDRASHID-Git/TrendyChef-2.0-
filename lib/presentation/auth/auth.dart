@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
+import 'package:trendychef/widgets/buttons/close/close.dart';
 import 'package:trendychef/widgets/buttons/google/googlebtn.dart';
 import 'package:trendychef/widgets/buttons/text/text.dart';
+import 'package:trendychef/widgets/icons%20and%20logos/main_logo.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -15,33 +15,12 @@ class AuthScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: Center(
-        // centers the constrained width container
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: SafeArea(
             child: Stack(
               children: [
-                // TOP-LEFT CLOSE BUTTON (inside the centered layout)
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Material(
-                    color: Colors.transparent, // keeps your design clean
-                    borderRadius: BorderRadius.circular(30),
-                    child: InkWell(
-                      onTap: () => context.pop(),
-                      borderRadius: BorderRadius.circular(30),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColors.fontColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Icon(Icons.close),
-                      ),
-                    ),
-                  ),
-                ),
+                Positioned(top: 10, left: 10, child: CloseXButton()),
 
                 // CENTER MAIN CONTENT
                 Align(
@@ -49,10 +28,7 @@ class AuthScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(
-                        "assets/images/trendy_logo.svg",
-                        height: 260,
-                      ),
+                      MainLogo(height: 260),
                       const SizedBox(height: 20),
                       Text(
                         lang.signintocontinue,
@@ -106,3 +82,5 @@ class AuthScreen extends StatelessWidget {
     );
   }
 }
+
+

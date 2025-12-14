@@ -22,82 +22,80 @@ class CartProductCard extends StatelessWidget {
         ? product.productEName
         : product.productArName;
 
-    return InkWell(
-      onTap: () => context.push("/product/${product.productId}"),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppColors.fontColor.withOpacity(0.1)),
-          borderRadius: BorderRadius.circular(12),
-        ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: AppColors.fontColor.withOpacity(0.1)),
+        borderRadius: BorderRadius.circular(12),
+      ),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ImageCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              InkWell(
+                onTap: () => context.push("/product/${product.productId}"),
+                child: ImageCard(
                   imageUrl: product.productImage,
                   width: 140, // Responsive width
                   height: 140,
                 ),
-                const SizedBox(width: 12),
+              ),
+              const SizedBox(width: 12),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Product Title
-                      ProductNameText(productName: productName),
-                      const SizedBox(height: 6),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProductNameText(productName: productName),
+                    const SizedBox(height: 6),
 
-                      /// Old Price
-                      Text(
-                        "${product.productRegularPrice.toStringAsFixed(2)} SAR",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.fontColor.withOpacity(0.6),
-                          decoration: TextDecoration.lineThrough,
+                    Text(
+                      "${product.productRegularPrice.toStringAsFixed(2)} SAR",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.fontColor.withOpacity(0.6),
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+
+                    /// New Price
+                    Text(
+                      "${product.productSalePrice.toStringAsFixed(2)} SAR",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.fontColor,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        QuantityControllerWidget(
+                          productId: product.productId,
+                          height: 30,
+                          width: 80,
                         ),
-                      ),
 
-                      /// New Price
-                      Text(
-                        "${product.productSalePrice.toStringAsFixed(2)} SAR",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.fontColor,
+                        DeleteButton(
+                          onTap: () {
+                            final cubit = context.read<CartCubit>();
+                            cubit.removeFromCart(product.productId);
+                          },
                         ),
-                      ),
-                      SizedBox(height: 10),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          QuantityControllerWidget(
-                            productId: product.productId,
-                            height: 30,
-                            width: 80,
-                          ),
-
-                          DeleteButton(
-                            onTap: () {
-                              final cubit = context.read<CartCubit>();
-                              cubit.removeFromCart(product.productId);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

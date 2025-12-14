@@ -31,7 +31,7 @@ class CategorySection extends StatelessWidget {
             itemCount: category.products?.length ?? 0,
             itemBuilder: (context, index) => ProductCard(
               product: category.products![index],
-              categoryId: category.iD.toString(),
+              categoryId: category.id.toString(),
             ),
           ),
         ),

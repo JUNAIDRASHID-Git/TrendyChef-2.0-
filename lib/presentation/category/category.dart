@@ -86,7 +86,6 @@ class CategoryScreen extends StatelessWidget {
                                 ),
                             itemBuilder: (context, index) {
                               final category = categories[index];
-
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -111,7 +110,7 @@ class CategoryScreen extends StatelessWidget {
                                       ),
                                       clipBehavior: Clip.hardEdge,
                                       child: Image.network(
-                                        category.image,
+                                        category.image!,
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) =>

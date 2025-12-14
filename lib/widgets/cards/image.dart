@@ -7,17 +7,52 @@ class ImageCard extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
+  final bool zoom;
 
   const ImageCard({
     super.key,
     required this.imageUrl,
     required this.width,
     required this.height,
+    this.zoom = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final fullUrl = baseHost + imageUrl;
+
+    Widget imageWidget = kIsWeb
+        ? Image.network(
+            fullUrl,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (_, _, _) =>
+                const Center(child: Icon(Icons.broken_image)),
+          )
+        : CachedNetworkImage(
+            imageUrl: fullUrl,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            errorWidget: (_, _, _) =>
+                const Center(child: Icon(Icons.broken_image)),
+          );
+
+    /// Wrap with zoom only if enabled
+    if (zoom) {
+      imageWidget = InteractiveViewer(
+        minScale: 1,
+        maxScale: 4,
+        panEnabled: true,
+        scaleEnabled: true,
+        child: imageWidget,
+      );
+    }
 
     return Container(
       width: width,
@@ -27,28 +62,7 @@ class ImageCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.hardEdge,
-      child: kIsWeb
-          ? Image.network(
-              fullUrl,
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, progress) {
-                if (progress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (_, _, _) =>
-                  const Center(child: Icon(Icons.broken_image)),
-            )
-          : CachedNetworkImage(
-              imageUrl: fullUrl,
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-
-              errorWidget: (_, _, _) =>
-                  const Center(child: Icon(Icons.broken_image)),
-            ),
+      child: imageWidget,
     );
   }
 }

@@ -193,7 +193,7 @@ class ProductScreen extends StatelessWidget {
   ) {
     return Stack(
       children: [
-        ImageCard(imageUrl: product.image, width: double.infinity, height: 400),
+        ImageCard(imageUrl: product.image, width: 350, height: 350, zoom: true),
 
         Positioned(
           right: 12,
@@ -202,7 +202,7 @@ class ProductScreen extends StatelessWidget {
             onPressed: () {
               shareProduct(product, lang);
             },
-            icon: Icon(Icons.share),
+            icon: Icon(Icons.share, color: AppColors.bluefont, size: 28),
           ),
         ),
       ],

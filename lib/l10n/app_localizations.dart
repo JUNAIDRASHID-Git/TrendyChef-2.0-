@@ -412,6 +412,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recommended Products'**
   String get recommendedproducts;
+
+  /// No description provided for @paymenhistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment History'**
+  String get paymenhistory;
+
+  /// No description provided for @dateoforder.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Order'**
+  String get dateoforder;
+
+  /// No description provided for @paymentstatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment status'**
+  String get paymentstatus;
+
+  /// No description provided for @orderstatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Order status'**
+  String get orderstatus;
+
+  /// No description provided for @kg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get kg;
+
+  /// No description provided for @qty.
+  ///
+  /// In en, this message translates to:
+  /// **'Qty'**
+  String get qty;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -166,4 +166,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recommendedproducts => 'Recommended Products';
+
+  @override
+  String get paymenhistory => 'Payment History';
+
+  @override
+  String get dateoforder => 'Date of Order';
+
+  @override
+  String get paymentstatus => 'Payment status';
+
+  @override
+  String get orderstatus => 'Order status';
+
+  @override
+  String get kg => 'kg';
+
+  @override
+  String get qty => 'Qty';
 }

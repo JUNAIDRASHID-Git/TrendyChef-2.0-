@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trendychef/core/services/models/user/user.dart';
 import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/widgets/buttons/language/language_selector.dart';
+import 'package:trendychef/widgets/icons%20and%20logos/main_logo.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.lang, required this.user});
@@ -19,11 +19,7 @@ class HomeHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              SvgPicture.asset(
-                "assets/images/trendy_logo.svg",
-                width: 80,
-                height: 80,
-              ),
+              MainLogo(height: 80),
               SizedBox(width: 5),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

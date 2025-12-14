@@ -25,9 +25,9 @@ class DeleteButton extends StatelessWidget {
           ),
           child: SvgPicture.asset(
             'assets/icons/trash.svg',
-            width: 22,
-            height: 22,
-            color: AppColors.fontColor,
+            width: 20,
+            height: 20,
+            color: AppColors.fontGrey,
           ),
         ),
       ),

@@ -52,5 +52,11 @@
   "yourpaymentwascancelled" : "لقد تم إلغاء الدفع الخاص بك",
   "backtohome" : "اذهب إلى المنزل",
   "tryagain" : "حاول ثانية",
-  "recommendedproducts" : "المنتجات الموصى بها"
+  "recommendedproducts" : "المنتجات الموصى بها",
+  "paymenhistory" : "تاريخ الدفع",
+  "dateoforder" : "تاريخ الطلب",
+  "paymentstatus" : "حالة الدفع",
+  "orderstatus" : "حالة الطلب",
+  "kg" : "كجم",
+  "qty" : "كمية"
 }

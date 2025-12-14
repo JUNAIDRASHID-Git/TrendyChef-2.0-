@@ -46,7 +46,7 @@ class CategoryView extends StatelessWidget {
                     final product = category.products![index];
                     return ProductCard(
                       product: product,
-                      categoryId: category.iD.toString(),
+                      categoryId: category.id.toString(),
                     );
                   },
                 ),

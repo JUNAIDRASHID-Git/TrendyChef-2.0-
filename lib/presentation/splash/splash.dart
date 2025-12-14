@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trendychef/core/services/api/user/create_guest.dart';
+import 'package:trendychef/widgets/icons%20and%20logos/main_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -77,13 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: Colors.white,
       body: FadeTransition(
         opacity: _fade,
-        child: Center(
-          child: SvgPicture.asset(
-            'assets/images/trendy_logo.svg',
-            width: 250,
-            height: 250,
-          ),
-        ),
+        child: Center(child: MainLogo(height: 250)),
       ),
     );
   }

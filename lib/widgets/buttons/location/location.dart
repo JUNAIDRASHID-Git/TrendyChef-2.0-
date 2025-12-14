@@ -50,13 +50,13 @@ class LocationButton extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(19)),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: .spaceBetween,
               children: [
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "assets/images/location-pin.svg",
-                      height: 25,
+                      "assets/icons/location-pin.svg",
+                      height: 30,
                       color: AppColors.fontColor,
                     ),
                     const SizedBox(width: 10),
@@ -77,9 +77,9 @@ class LocationButton extends StatelessWidget {
 
                 SvgPicture.asset(
                   hasAddress
-                      ? "assets/images/edit-icon.svg"
-                      : "assets/images/add-circle.svg",
-                  height: 30,
+                      ? "assets/icons/edit.svg"
+                      : "assets/icons/add-circle.svg",
+                  height: 25,
                   color: AppColors.fontColor,
                 ),
               ],

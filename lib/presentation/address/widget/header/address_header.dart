@@ -23,7 +23,7 @@ class AddressHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            "assets/images/location-pin.svg",
+            "assets/icons/location-pin.svg",
             height: 35,
             color: Colors.white,
           ),
