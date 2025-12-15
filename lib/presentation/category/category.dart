@@ -5,6 +5,7 @@ import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/category/bloc/category_bloc.dart';
 import 'package:trendychef/presentation/category/widgets/category_product_screen.dart';
 import 'package:trendychef/widgets/buttons/search/fake_search.dart';
+import 'package:trendychef/widgets/cards/image.dart';
 import 'package:trendychef/widgets/container/error/error_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -100,37 +101,10 @@ class CategoryScreen extends StatelessWidget {
                                 },
                                 child: Column(
                                   children: [
-                                    /// Category Image
-                                    Container(
-                                      height: 100,
+                                    ImageCard(
+                                      imageUrl: category.image!,
                                       width: 100,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      clipBehavior: Clip.hardEdge,
-                                      child: Image.network(
-                                        category.image!,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                const Icon(
-                                                  Icons.broken_image_rounded,
-                                                  color: Colors.grey,
-                                                ),
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                    ),
-                                              );
-                                            },
-                                      ),
+                                      height: 100,
                                     ),
 
                                     const SizedBox(height: 8),
