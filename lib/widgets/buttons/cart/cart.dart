@@ -26,6 +26,29 @@ class CartButton extends StatelessWidget {
           );
         }
 
+        if (item.stock < 1) {
+          return Container(
+            width: 170,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.red,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .center,
+              children: [
+                Text(
+                  "Out Of Stock",
+                  style: TextStyle(
+                    color: AppColors.backGroundColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
         return Material(
           color: Colors.transparent,
           child: InkWell(
