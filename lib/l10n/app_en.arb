@@ -58,5 +58,6 @@
   "paymentstatus" : "Payment status",
   "orderstatus" : "Order status",
   "kg" : "kg",
-   "qty" : "Qty"
+  "qty" : "Qty",
+  "outofstock" : "Out Of Stock"
 }

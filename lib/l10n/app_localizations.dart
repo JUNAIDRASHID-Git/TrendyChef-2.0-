@@ -448,6 +448,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Qty'**
   String get qty;
+
+  /// No description provided for @outofstock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out Of Stock'**
+  String get outofstock;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

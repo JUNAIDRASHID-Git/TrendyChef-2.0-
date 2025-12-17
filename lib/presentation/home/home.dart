@@ -51,39 +51,50 @@ class HomeScreen extends StatelessWidget {
     }
 
     if (state is HomeLoaded) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 5),
-          HomeHeader(lang: lang, user: state.user),
-          const SizedBox(height: 5),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(height: 50, child: FakeSearchButton()),
-          ),
-
-          const SizedBox(height: 20),
-
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                context.read<HomeBloc>().add(LoadHomeData());
-              },
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    AutoSlidingBanner(banners: state.banners),
-                    const SizedBox(height: 15),
-                    CategoryView(state: state, lang: lang),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+      return RefreshIndicator(
+        onRefresh: () async {
+          context.read<HomeBloc>().add(LoadHomeData());
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  const SizedBox(height: 5),
+                  HomeHeader(lang: lang, user: state.user),
+                ],
               ),
             ),
-          ),
-        ],
+
+            SliverAppBar(
+              pinned: true,
+              floating: false,
+              snap: false,
+              elevation: 0,
+              backgroundColor: AppColors.backGroundColor,
+              toolbarHeight: 60,
+              automaticallyImplyLeading: false,
+              titleSpacing: 0,
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(height: 50, child: FakeSearchButton()),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  AutoSlidingBanner(banners: state.banners),
+                  const SizedBox(height: 15),
+                  CategoryView(state: state, lang: lang),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
     }
 

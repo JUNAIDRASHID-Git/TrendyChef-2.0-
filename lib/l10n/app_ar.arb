@@ -58,5 +58,6 @@
   "paymentstatus" : "حالة الدفع",
   "orderstatus" : "حالة الطلب",
   "kg" : "كجم",
-  "qty" : "كمية"
+  "qty" : "كمية",
+  "outofstock" : "إنتهى من المخزن"
 }

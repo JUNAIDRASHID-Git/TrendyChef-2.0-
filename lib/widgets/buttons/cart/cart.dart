@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trendychef/core/theme/app_colors.dart';
 import 'package:trendychef/core/services/models/cart/cart_item.dart';
+import 'package:trendychef/l10n/app_localizations.dart';
 import 'package:trendychef/presentation/cart/cubit/cart_cubit.dart';
 import 'package:trendychef/widgets/controllers/quantity/quantity_controller.dart';
 import 'package:trendychef/widgets/text/sale_price.dart';
@@ -15,6 +16,7 @@ class CartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
+        final lang = AppLocalizations.of(context)!;
         final cubit = context.read<CartCubit>();
         final inCart = cubit.isInCart(item.productId);
 
@@ -39,7 +41,7 @@ class CartButton extends StatelessWidget {
               crossAxisAlignment: .center,
               children: [
                 Text(
-                  "Out Of Stock",
+                  lang.outofstock,
                   style: TextStyle(
                     color: AppColors.backGroundColor,
                     fontWeight: FontWeight.bold,

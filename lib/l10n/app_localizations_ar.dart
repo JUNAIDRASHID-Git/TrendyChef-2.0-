@@ -184,4 +184,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get qty => 'كمية';
+
+  @override
+  String get outofstock => 'إنتهى من المخزن';
 }
