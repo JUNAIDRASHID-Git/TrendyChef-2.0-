@@ -70,10 +70,9 @@ class MyApp extends StatelessWidget {
 
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-              fontFamily: "inter",
+              fontFamily: state.locale.languageCode == 'ar' ? 'cairo' : 'Inter',
             ),
 
-            // 🔥 GoRouter replaces home: and routes:
             routerConfig: router,
           ),
         );
